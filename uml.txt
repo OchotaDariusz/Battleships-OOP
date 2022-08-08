@@ -1,0 +1,129 @@
+@startuml
+skinparam packageStyle rectangle
+
+package com.codecool.battleship.ships {
+  class Ship
+  enum ShipType
+}
+
+package com.codecool.battleship.board {
+  class BoardFactory
+  Board *-- Square
+  Square *-- SquareStatus
+  enum SquareStatus
+}
+
+package com.codecool.battleship.players {
+  abstract class Player
+  class UserPlayer extends Player
+  abstract class ComputerPlayer extends Player
+  class ComputerPlayerEasy extends ComputerPlayer
+  class ComputerPlayerNormal extends ComputerPlayer
+  class ComputerPlayerHard extends ComputerPlayer
+}
+
+package com.codecool.battleship.io {
+  class Display
+  class Input
+}
+
+package com.codecool.battleship {
+  Battleship *-- Display
+  Battleship *-- Input
+  class Game
+}
+
+class Battleship {
+  -Display display
+  -Input input
+  +void mainLoop()
+  +void displayMenu()
+  +void startGame()
+  +void displayHighScores()
+  +void exit()
+}
+
+class Display {
+  +void printMenu()
+  +void printBoard()
+  +void printGameplay()
+  +void printWinner()
+}
+
+class Input {
+  +String getUserInput()
+  +boolean validateInput()
+}
+
+
+class Game {
+  +void makeMove()
+  +boolean checkIfHit()
+  +boolean checkIfShipSunk()
+  +boolean checkIfWon()
+  +void chooseGameMode()
+}
+
+abstract class Player {
+  -List<Ship> ships
+  +List<Ship> getShips()
+  +boolean isAlive()
+  +{abstract} void makeMove()
+}
+
+abstract class ComputerPlayer {
+  -List<String> alreadyStruckFields
+  +List<String> getAlreadyStruckFields()
+  +void addStrike()
+}
+
+class BoardFactory {
+  +void randomPlacement()
+  +void manualPlacement()
+}
+
+class Board {
+  -Square[][] ocean
+  +Square[][] getOcean()
+  +boolean isPlacementOk()
+}
+
+class Ship {
+  -List<Square> coords
+  +List<Square> getCoords()
+}
+
+enum ShipType {
+  CARRIER(1),
+  CRUISER(2),
+  BATTLESHIP(3),
+  SUBMARINE(4),
+  DESTROYER(5)
+
+  -int shipLength
+  ShipType(int length)
+}
+
+class Square {
+  -int x
+  -int y
+  -SquareStatus squareStatus
+  +int getX()
+  +int getY()
+  +SquareStatus getSquareStatus()
+  +void showSquareStatus()
+}
+
+enum SquareStatus {
+  EMPTY(" "),
+  SHIP("🚢"),
+  HIT("X"),
+  MISSED("◎")
+
+  -String character
+  +String getCharacter()
+
+  SquareStatus(String character)
+}
+
+@enduml
