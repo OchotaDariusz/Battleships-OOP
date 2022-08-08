@@ -7,7 +7,8 @@ package com.codecool.battleship.ships {
 }
 
 package com.codecool.battleship.board {
-  class BoardFactory
+  interface BoardFactory
+  class Board implements BoardFactory
   Board *-- Square
   Square *-- SquareStatus
   enum SquareStatus
@@ -30,7 +31,8 @@ package com.codecool.battleship.io {
 package com.codecool.battleship {
   Battleship *-- Display
   Battleship *-- Input
-  class Game
+  abstract class Game
+  class Battleship extends Game
 }
 
 class Battleship {
@@ -55,8 +57,7 @@ class Input {
   +boolean validateInput()
 }
 
-
-class Game {
+abstract class Game {
   +void makeMove()
   +boolean checkIfHit()
   +boolean checkIfShipSunk()
@@ -77,7 +78,7 @@ abstract class ComputerPlayer {
   +void addStrike()
 }
 
-class BoardFactory {
+interface BoardFactory {
   +void randomPlacement()
   +void manualPlacement()
 }
@@ -125,5 +126,4 @@ enum SquareStatus {
 
   SquareStatus(String character)
 }
-
 @enduml

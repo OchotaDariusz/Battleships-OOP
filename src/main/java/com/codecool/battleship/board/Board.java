@@ -1,4 +1,4 @@
 package com.codecool.battleship.board;
 
-public class Board {
+public class Board implements BoardFactory {
 }
