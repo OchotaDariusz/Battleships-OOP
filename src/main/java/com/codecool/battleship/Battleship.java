@@ -1,4 +1,4 @@
 package com.codecool.battleship;
 
-public class Battleship {
+public class Battleship extends Game {
 }
