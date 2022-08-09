@@ -12,6 +12,18 @@ public class Display {
                 """);
         Scanner scanner = new Scanner(System.in);
         int mode = scanner.nextInt();
-        while (mode !=  1 || )
+        switch (mode) {
+            case 1:
+                playerVsPlayer();
+                break;
+            case 2:
+                playerVsComputer();
+                break;
+            case 0:
+                exit();
+                break;
+
+        }
+
     }
 }
