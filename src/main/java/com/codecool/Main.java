@@ -1,9 +1,6 @@
 package com.codecool;
 
 import com.codecool.battleship.*;
-import com.codecool.battleship.board.Board;
-import com.codecool.battleship.board.Square;
-import com.codecool.battleship.board.SquareStatus;
 
 public class Main {
 
@@ -26,5 +23,8 @@ public class Main {
         System.out.println(b.shipPlace(6,5));
         System.out.println(b.shipCommit());
         System.out.println("\n\n");
+
+        Battleship game = new Battleship();
+        game.startGame();
     }
 }
