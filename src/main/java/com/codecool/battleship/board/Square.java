@@ -5,6 +5,10 @@ public class Square {
     private int Y;
     private Status SquareStatus;
 
+    public void setSquareStatus(Status squareStatus) {
+        SquareStatus = squareStatus;
+    }
+
     public enum Status {
         S_EMPTY,
         S_SHIP,
@@ -13,7 +17,7 @@ public class Square {
 
         public char GetCharacter() {
             if (this == Status.S_SHIP) {
-                return '■';
+                return '*';
             }
             if (this == Status.S_HIT) {
                 return 'x';

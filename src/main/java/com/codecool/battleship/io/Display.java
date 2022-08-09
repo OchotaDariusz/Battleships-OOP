@@ -12,6 +12,12 @@ public class Display {
                 PRESS --> 0. EXIT
                 """);
     }
+    public void printPlacementOption(){
+        System.out.println("""
+                PRESS --> 1. To place ships manually
+                PRESS --> 2. To place ships randomly
+                """);
+    }
 
     public void printBoard(Board board1, Board board2) {
         System.out.println("Board");

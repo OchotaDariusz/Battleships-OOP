@@ -14,9 +14,11 @@ public class Input {
         return coordinates.nextLine().toUpperCase();
     }
 
-    public boolean validateGameMode(String input) {
+    public boolean validateOption(String input) {
         return input.equals("1") || input.equals("2");
     }
+
+
 
     public boolean validateCoords(String input, int size) {
         try {
@@ -37,4 +39,16 @@ public class Input {
         return coords;
     }
 
+    public int[] askForCords(String label,int size){
+        String input = askForInput(label);
+        while(!validateCoords(input,size)){
+            input = askForInput(label);
+        }
+
+        return convertCoords(input);
+    }
+
+
+
 }
+
