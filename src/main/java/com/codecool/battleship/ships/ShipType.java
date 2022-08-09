@@ -1,7 +1,6 @@
 package com.codecool.battleship.ships;
 
 public enum ShipType {
-
     CARRIER(1),
     CRUISER(2),
     BATTLESHIP(3),
@@ -11,6 +10,4 @@ public enum ShipType {
     ShipType(int shipLength) {
         this.shipLength = shipLength;
     }
-
-
 }
