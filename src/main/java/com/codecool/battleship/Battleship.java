@@ -1,16 +1,18 @@
 package com.codecool.battleship;
 
-
 import com.codecool.battleship.io.Display;
 import com.codecool.battleship.io.Input;
+import com.codecool.battleship.players.AbstractPlayer;
+import com.codecool.battleship.players.ComputerPlayerEasy;
+import com.codecool.battleship.players.UserPlayer;
 
 public class Battleship {
 
-    private final Display display = null;
-    private final Input input = null;
-
+    private final Display display = new Display();
+    private final Input input = new Input();
     private int gameMode;  // 1 - player vs player | 2 - player vs computer
     private int gamePhase;  // 1 - placement phase | 2 - shooting phase
+    private final AbstractPlayer[] players = new AbstractPlayer[2];
 
     public int getGamePhase() {
         return gamePhase;
@@ -29,7 +31,7 @@ public class Battleship {
     }
 
     private void mainLoop() {
-        int playerId = 1;
+        int playerId = 0;
         System.out.println("Main Loop");
         while (!checkIfWon()) {
             makeMove(playerId);
@@ -40,7 +42,7 @@ public class Battleship {
                     System.out.println("Ship has been sunken");
                 }
             } else {
-                playerId = (playerId == 1) ? 2 : 1;
+                playerId = (playerId == 0) ? 1 : 0;
             }
         }
         displayHighScores(playerId);
@@ -50,19 +52,18 @@ public class Battleship {
 
     private void displayMenu() {
         System.out.println("Display Menu");
-//        display.printMenu();
+        display.printMenu();
     }
 
     public void startGame() {
         System.out.println("Start Game");
-        displayMenu();
         chooseGameMode(this);
         mainLoop();
     }
 
     private void displayHighScores(int playerId) {
         System.out.println("High scores");
-//        display.printWinner();
+        display.printWinner(playerId);
     }
 
     private void exit() {
@@ -75,6 +76,7 @@ public class Battleship {
             System.out.println("placement phase");
             // placement phase
             // get input -> place ship * amount of ships
+            // input.askForInput("Please enter coordinates: ")
         } else {
             System.out.println("shooting phase");
             // shooting phase
@@ -96,9 +98,25 @@ public class Battleship {
     }
 
     private void chooseGameMode(Battleship battleship) {
-        System.out.println("Game mode");
-        int gameMode = 1; // TODO: scanner get input
+        displayMenu();
+        String userInput = input.askForInput("Choose game mode: ");
+        int gameMode;
+        while (!input.validateGameMode(userInput)) {
+            System.out.println("Wrong input!");
+            userInput = input.askForInput("Choose game mode: ");
+        }
+        gameMode = Integer.parseInt(userInput);
         battleship.setGameMode(gameMode);
+        setupPlayers();
+    }
+
+    private void setupPlayers() {
+        players[0] = new UserPlayer();
+        if (getGameMode() == 1) {
+            players[1] = new UserPlayer();
+        } else {
+            players[1] = new ComputerPlayerEasy();
+        }
     }
 
 }

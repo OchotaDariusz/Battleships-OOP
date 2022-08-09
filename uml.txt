@@ -15,9 +15,9 @@ package com.codecool.battleship.board {
 }
 
 package com.codecool.battleship.players {
-  abstract class Player
-  class UserPlayer extends Player
-  abstract class ComputerPlayer extends Player
+  abstract class AbstractPlayer
+  class UserPlayer extends AbstractPlayer
+  abstract class ComputerPlayer extends AbstractPlayer
   class ComputerPlayerEasy extends ComputerPlayer
   class ComputerPlayerNormal extends ComputerPlayer
   class ComputerPlayerHard extends ComputerPlayer
@@ -40,6 +40,7 @@ class Battleship {
   -int gameMode
   -int gamePhase
   -int getGamePhase()
+  -AbstractPlayer[] players
   +void setGamePhase(int gamePhase)
   -void setGameMode(int gameMode)
   -void mainLoop()
@@ -52,23 +53,28 @@ class Battleship {
   -boolean checkIfShipSunk()
   -boolean checkIfWon()
   -void chooseGameMode(Battleship battleship)
+  -void setupPlayers()
 }
 
 class Display {
   +void printMenu()
-  +void printBoard()
+  +void printBoard(Board board1, Board board2)
   +void printGameplay()
-  +void printWinner()
+  +void printWinner(int playerId)
 }
 
 class Input {
-  +String getUserInput()
-  +boolean validateInput()
+  +boolean validateForBoardSize(int size)
+  +String askForInput(String label)
+  +boolean validateGameMode(String input)
+  +boolean validateInput(String input, int size)
+  -int[] convertCoords(String input)
 }
 
-abstract class Player {
+abstract class AbstractPlayer {
   -List<Ship> ships
   +List<Ship> getShips()
+  +void addShip(Ship ship)
   +boolean isAlive()
   +{abstract} void makeMove()
 }
