@@ -13,6 +13,7 @@ public class Input {
         }
         return size;
     }
+
     public String askForInput() {
         System.out.println("Please enter coordinates: ");
         Scanner coordinates = new Scanner(System.in);
@@ -21,8 +22,21 @@ public class Input {
 
     public boolean validateInput(String input, int size) {
         try {
-            int column = convert
+            int[] coords = convertCoords(input);
+            return ((coords[0] <= size - 1 && coords[0] >= 0) &&
+                    (coords[1] <= size - 1 && coords[1] >= 0));
+        } catch (Exception e) {
+            return false;
         }
+    }
+
+    private int[] convertCoords(String input) {
+        int column = input.charAt(0) - 'A';
+        int row = Integer.parseInt(input.substring(1)) - 1;
+        int[] coords = new int[2];
+        coords[0] = column;
+        coords[1] = row;
+        return coords;
     }
 
 }
