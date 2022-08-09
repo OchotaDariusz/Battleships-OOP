@@ -38,9 +38,71 @@ public class Board {
 
     @Override
     public String toString() {
-        String ret = "";
+        String board = "";
 
-        ret += "  ";
+        // top legend
+        board += " " + "   ";
+        for (int x = 0; x < BOARD_SIZE; x++)
+            board += " " + Character.toString('A'+x).toString() + "  ";
+        board += "\n";
+
+        // board with leftside legend
+        for (int x = 0; x < BOARD_SIZE+1; x++)
+        {
+            if (x == 0)
+                board += "   ┌──";
+            if (x == BOARD_SIZE)
+                board += "─┐";
+            if (x > 0 && x < BOARD_SIZE)
+                board += "─┬──";
+        }
+        board += "\n";
+
+        for (int y = 0; y < BOARD_SIZE; y++)
+        {
+            String label = String.valueOf(y+1);
+            if (label.length() < 2)
+                label = " "+label;
+
+            // main loop, place symbols / y axis labels here
+            for (int x = 0; x < BOARD_SIZE+1; x++) {
+                if (x==0)
+                    board += label + " │ " + ocean[x][y].toString();
+                if (x > 0 && x < BOARD_SIZE)
+                    board += " │ "+ ocean[x][y].toString();
+                if (x == BOARD_SIZE)
+                    board += " │";
+            }
+            board += "\n";
+
+            if (y == BOARD_SIZE - 1)
+                break;
+            for (int x = 0; x < BOARD_SIZE+1; x++)
+            {
+                if (x==0)
+                    board += "   ├──";
+                if (x == BOARD_SIZE)
+                    board += "─┤";
+                if (x > 0 && x < BOARD_SIZE)
+                    board += "─┼──";
+            }
+            board += "\n";
+        }
+
+        for (int x = 0; x < BOARD_SIZE+1; x++)
+        {
+            if (x == 0)
+                board += "   └──";
+            if (x == BOARD_SIZE)
+                board += "─┘";
+            if (x > 0 && x < BOARD_SIZE)
+                board += "─┴──";
+        }
+        return board;
+
+
+        /*
+        ret += "    ";
         for (int x = 0; x < BOARD_SIZE; x++)
         {
             char label = 'A';
@@ -54,16 +116,17 @@ public class Board {
             if (label.length() < 2)
                 label = " "+label;
 
-            ret += label;
+            ret += label+ " ";
 
+            ret += "|";
             for (int x=0; x<BOARD_SIZE; x++)
             {
-                ret += ocean[x][y].toString() + "|";
+                ret += " " + ocean[x][y].toString() + " |";
             }
             ret += "\n";
 
-        }
+        }*/
 
-        return ret;
+       // return ret;
     }
 }

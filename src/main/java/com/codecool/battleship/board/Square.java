@@ -13,7 +13,7 @@ public class Square {
 
         public char GetCharacter() {
             if (this == Status.S_SHIP) {
-                return '*';
+                return '■';
             }
             if (this == Status.S_HIT) {
                 return 'x';

@@ -13,7 +13,7 @@ public class Main {
         System.out.println("\n\n");
 
         System.out.println("New Ship");
-        System.out.println(b.shipPlace(1,1));
+        System.out.println(b.shipPlace(1,7));
         System.out.println("\n\n");
 
         System.out.println("New Ship");
