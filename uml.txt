@@ -31,18 +31,27 @@ package com.codecool.battleship.io {
 package com.codecool.battleship {
   Battleship *-- Display
   Battleship *-- Input
-  abstract class Game
-  class Battleship extends Game
+  class Battleship
 }
 
 class Battleship {
   -Display display
   -Input input
-  +void mainLoop()
-  +void displayMenu()
+  -int gameMode
+  -int gamePhase
+  -int getGamePhase()
+  +void setGamePhase(int gamePhase)
+  -void setGameMode(int gameMode)
+  -void mainLoop()
+  -void displayMenu()
   +void startGame()
-  +void displayHighScores()
-  +void exit()
+  -void displayHighScores(int playerId)
+  -void exit()
+  -void makeMove(int playerId)
+  -boolean checkIfHit()
+  -boolean checkIfShipSunk()
+  -boolean checkIfWon()
+  -void chooseGameMode(Battleship battleship)
 }
 
 class Display {
@@ -55,14 +64,6 @@ class Display {
 class Input {
   +String getUserInput()
   +boolean validateInput()
-}
-
-abstract class Game {
-  +void makeMove()
-  +boolean checkIfHit()
-  +boolean checkIfShipSunk()
-  +boolean checkIfWon()
-  +void chooseGameMode()
 }
 
 abstract class Player {
