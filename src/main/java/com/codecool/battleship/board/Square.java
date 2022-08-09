@@ -11,7 +11,7 @@ public class Square {
         S_HIT,
         S_MISS;
 
-        char GetCharacter() {
+        public char GetCharacter() {
             if (this == Status.S_SHIP) {
                 return '*';
             }

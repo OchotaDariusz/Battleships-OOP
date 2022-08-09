@@ -1,6 +1,7 @@
 package com.codecool;
 
 import com.codecool.battleship.*;
+import com.codecool.battleship.board.Board;
 
 public class Main {
 
@@ -8,23 +9,22 @@ public class Main {
 
         Board b = new Board();
         System.out.println("New Ship");
-        System.out.println(b.shipPlace(1,1));
-        System.out.println(b.shipCommit());
+        System.out.println(b.shipPlace(0,0));
         System.out.println("\n\n");
 
         System.out.println("New Ship");
         System.out.println(b.shipPlace(1,1));
-        System.out.println(b.shipPlace(1,2));
-        System.out.println(b.shipCommit());
         System.out.println("\n\n");
 
         System.out.println("New Ship");
         System.out.println(b.shipPlace(5,5));
-        System.out.println(b.shipPlace(6,5));
-        System.out.println(b.shipCommit());
         System.out.println("\n\n");
 
-        Battleship game = new Battleship();
-        game.startGame();
+
+
+        System.out.println(b.toString());
+
+        //Battleship game = new Battleship();
+        //game.startGame();
     }
 }

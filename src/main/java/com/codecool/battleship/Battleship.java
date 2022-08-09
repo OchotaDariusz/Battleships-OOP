@@ -1,9 +1,14 @@
 package com.codecool.battleship;
 
+
+import com.codecool.battleship.io.Display;
+import com.codecool.battleship.io.Input;
+
 public class Battleship {
 
-    private final Display display;
-    private final Input input;
+    private final Display display = null;
+    private final Input input = null;
+
     private int gameMode;  // 1 - player vs player | 2 - player vs computer
     private int gamePhase;  // 1 - placement phase | 2 - shooting phase
 
