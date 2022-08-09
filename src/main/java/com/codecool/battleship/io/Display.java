@@ -1,29 +1,28 @@
 package com.codecool.battleship.io;
 
-import java.util.Scanner;
+import com.codecool.battleship.board.Board;
 
 public class Display {
-    public static void main(String[] args) {
+
+    public void printMenu() {
         System.out.println("""
                 WELCOME TO THE BATTLESHIP GAME.
                 PRESS --> 1. PLAYER VS. PLAYER
                 PRESS --> 2. PLAYER VS. COMPUTER
                 PRESS --> 0. EXIT
                 """);
-        Scanner scanner = new Scanner(System.in);
-        int mode = scanner.nextInt();
-        switch (mode) {
-            case 1:
-                playerVsPlayer();
-                break;
-            case 2:
-                playerVsComputer();
-                break;
-            case 0:
-                exit();
-                break;
+    }
 
-        }
+    public void printBoard(Board board1, Board board2) {
+        System.out.println("Board");
+    }
+
+    public void printGameplay() {
+        System.out.println("shoot miss hit");
+    }
+
+    public void printWinner(int playerId) {
 
     }
+
 }

@@ -13,6 +13,10 @@ public abstract class AbstractPlayer {
         return ships;
     }
 
+    public void addShip(Ship ship) {
+        ships.add(ship);
+    }
+
     public boolean isAlive() {
         return ships.size() != 0;
     }
