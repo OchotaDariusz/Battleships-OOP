@@ -37,7 +37,7 @@ public class Input {
             int[] coords = convertCoords(input);
             return isOnBoard(coords, boardSize) &&
                     (isSpaceForVertical(coords, board, boardSize, shipLength) ||
-                    isSpaceForHorizontal(coords, board, boardSize, shipLength));
+                            isSpaceForHorizontal(coords, board, boardSize, shipLength));
         } catch (Exception e) {
             return false;
         }
@@ -73,12 +73,20 @@ public class Input {
         if (coords[0] + shipLength > boardSize) {
             return false;
         }
+        int[] check = new int[2];
         for (int i = 0; i < shipLength; i++) {
-            coords[0] += i;
-            if (!isNotOccupied(board, coords)) {
+            System.out.println("moze tu?");
+            System.out.println(coords[0]);
+            check[0] = coords[0] + i;
+            check[1] = coords[1];
+            System.out.println(coords[0]);
+            System.out.println("moze tu?");
+            if (!isNotOccupied(board, check)) {
                 return false;
             }
         }
+        System.out.println("sprawdzam, horizontalcords[0]" + coords[0]);
+        System.out.println(" sprawdzam horizontal cords[1]" + coords[1]);
         return true;
     }
 
@@ -86,9 +94,12 @@ public class Input {
         if (coords[1] + shipLength > boardSize) {
             return false;
         }
+        int[] check = new int[2];
         for (int i = 0; i < shipLength; i++) {
-            coords[1] += i;
-            if (!isNotOccupied(board, coords)) {
+            check[0] = coords[0] + i;
+            check[1] = coords[1];
+
+            if (!isNotOccupied(board, check)) {
                 return false;
             }
         }

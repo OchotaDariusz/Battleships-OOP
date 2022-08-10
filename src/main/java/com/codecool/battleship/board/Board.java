@@ -51,40 +51,27 @@ public class Board implements BoardFactory {
     }
 
     @Override
-    public void randomPlacement(AbstractPlayer player, Board board, int shipSize) {
+    public void randomPlacement(AbstractPlayer player, Board board, int shipSize, Input input) {
         Ship ship = new Ship();
         Random random = new Random();
 
         int[] coords = new int[2];
-        coords[0] = random.nextInt(0, board.getBoardSize() - 1);
-        System.out.println("Coord od zera " + coords[0]);
-        coords[1] = random.nextInt(0, board.getBoardSize() - 1);
-        System.out.println("Coord od jedynki " + coords[1]);
-//            pobranie kierunku + validacja
+        boolean flag = true;
+        boolean horizontal;
+        boolean vertical;
+        do {
+            coords[0] = random.nextInt(0, board.getBoardSize() - 1);
+            coords[1] = random.nextInt(0, board.getBoardSize() - 1);
+            horizontal = input.isSpaceForHorizontal(coords, board, board.getBoardSize(), shipSize);
+            vertical = input.isSpaceForVertical(coords, board, board.getBoardSize(), shipSize);
+            if (horizontal || vertical) flag = false;
+        } while (flag);
         int x = coords[0], y = coords[1];
-////        ocean[x][y].setSquareStatus(SquareStatus.S_SHIP);
-//        boolean spaceForVertical = input.isSpaceForVertical(coords, board, board.getBoardSize(), shipSize);
-//        boolean spaceForHorizontal = input.isSpaceForHorizontal(coords, board, board.getBoardSize(), shipSize);
-
-        boolean horizontal = true;
-
-//        if (shipSize != 1 && spaceForVertical && spaceForHorizontal) {
-//            String direction = input.askForDirection();
-//            horizontal = direction.equals("1"); // 1 - horizontal | 2 - vertical
-//        } else if (spaceForVertical) {
-//            horizontal = false;
-//        }
-
         // TODO: REFACTOR
         for (int i = 0; i < shipSize; i++) {
             if (horizontal) {
-                try {
-                    ocean[x + i][y].setSquareStatus(SquareStatus.S_SHIP);
-                    ship.addCords(new Square(x + i, y, SquareStatus.S_SHIP));
-                } catch (Exception e) {
-                    ocean[x][y + i].setSquareStatus(SquareStatus.S_SHIP);
-                    ship.addCords(new Square(x, y + i, SquareStatus.S_SHIP));
-                }
+                ocean[x + i][y].setSquareStatus(SquareStatus.S_SHIP);
+                ship.addCords(new Square(x + i, y, SquareStatus.S_SHIP));
             } else {
                 ocean[x][y + i].setSquareStatus(SquareStatus.S_SHIP);
                 ship.addCords(new Square(x, y + i, SquareStatus.S_SHIP));
