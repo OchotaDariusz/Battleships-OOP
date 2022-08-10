@@ -47,10 +47,10 @@ public class Input {
             for (int j = 0; j < tablica.length; j++) {
                 try {
                     if (board.getOcean()[coords[0] + tablica[i]][coords[1] + tablica[j]].getSquareStatus().equals(SquareStatus.S_SHIP)) {
+                        System.out.println("Can't place ship here!");
                         return false;
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    System.out.println("out of bound");
                     continue;
                 }
             }
@@ -97,9 +97,9 @@ public class Input {
         String input = askForInput(label);
 
         while (!validateCords(input, board, boardSize, shipSize)) {
+            System.out.println("WRONG COORDS");
             input = askForInput(label);
         }
-
         return convertCoords(input);
     }
 

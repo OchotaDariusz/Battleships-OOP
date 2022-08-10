@@ -50,7 +50,7 @@ public class Battleship {
         int playerId = 1;
         System.out.println("Main Loop");
         while (!checkIfWon()) {
-            display.printBoard(playerOneBoard, playerTwoBoard);
+            if (getGamePhase() == 2) display.printBoard(playerOneBoard, playerTwoBoard);
             board = (playerId == 1) ? playerOneBoard : playerTwoBoard;
             makeMove(board, playerId);
 
@@ -106,6 +106,7 @@ public class Battleship {
     private void placementPhase(Board board, int playerId) {
         System.out.println("placement phase");
         for (int ship : shipsToPlace) {
+            display.printBoard(playerOneBoard, playerTwoBoard);
             if (playerId == 1) {
                 if (placementOption == 1) {
                     playerOneBoard.manualPlacement(board, ship, input);
