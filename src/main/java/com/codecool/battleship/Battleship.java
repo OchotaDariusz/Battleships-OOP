@@ -14,6 +14,7 @@ public class Battleship {
     private int gameMode;  // 1 - player vs player | 2 - player vs computer
     private int gamePhase = 1;  // 1 - placement phase | 2 - shooting phase
     private final AbstractPlayer[] players = new AbstractPlayer[2];
+    private final Board emptyBoard = new Board();
     private final Board playerOneBoard = new Board();
     private final Board playerTwoBoard = new Board();
     private final int[] shipsToPlace = {5, 4, 3, 2, 1};
@@ -50,7 +51,10 @@ public class Battleship {
         int playerId = 1;
         System.out.println("Main Loop");
         while (!checkIfWon()) {
-            if (getGamePhase() == 2) display.printBoard(playerOneBoard, playerTwoBoard);
+            if (getGamePhase() == 2) {
+                if (playerId == 1) display.printBoard(playerOneBoard, emptyBoard);
+                else display.printBoard(emptyBoard, playerTwoBoard);
+            }
             board = (playerId == 1) ? playerOneBoard : playerTwoBoard;
             makeMove(board, playerId);
 
@@ -106,7 +110,8 @@ public class Battleship {
     private void placementPhase(Board board, int playerId) {
         System.out.println("placement phase");
         for (int ship : shipsToPlace) {
-            display.printBoard(playerOneBoard, playerTwoBoard);
+            if (playerId == 1) display.printBoard(playerOneBoard, emptyBoard);
+                else display.printBoard(emptyBoard, playerTwoBoard);
             if (playerId == 1) {
                 if (placementOption == 1) {
                     playerOneBoard.manualPlacement(board, ship, input);
