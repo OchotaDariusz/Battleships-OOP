@@ -144,4 +144,8 @@ public class Display {
 
     }
 
+    public void print(String string) {
+        System.out.println(string);
+    }
+
 }

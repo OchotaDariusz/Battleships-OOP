@@ -36,7 +36,6 @@ public class Board implements BoardFactory {
                     return false;
             }
 
-
         }
         return true;
     }
@@ -62,10 +61,19 @@ public class Board implements BoardFactory {
         int[] coords = input.askForCords("Place your ship", board, BOARD_SIZE, shipSize);
 //            pobranie kierunku + validacja
         int x = coords[0], y = coords[1];
-        ocean[x][y].setSquareStatus(SquareStatus.S_SHIP);
-//        ship.addCords(new Square(x, y, SquareStatus.S_SHIP));
+//        ocean[x][y].setSquareStatus(SquareStatus.S_SHIP);
+        boolean spaceForVertical = input.isSpaceForVertical(coords, board, board.getBoardSize(), shipSize);
+        boolean spaceForHorizontal = input.isSpaceForHorizontal(coords, board, board.getBoardSize(), shipSize);
 
-        boolean horizontal = true; // over
+        boolean horizontal = true;
+
+        if (shipSize != 1 && spaceForVertical && spaceForHorizontal) {
+            String direction = input.askForDirection();
+            horizontal = direction.equals("1"); // 1 - horizontal | 2 - vertical
+        } else if (spaceForVertical) {
+            horizontal = false;
+        }
+
         for (int i = 0; i < shipSize; i++) {
             if (horizontal) {
                 ocean[x + i][y].setSquareStatus(SquareStatus.S_SHIP);
@@ -75,7 +83,6 @@ public class Board implements BoardFactory {
                 ship.addCords(new Square(x, y + i, SquareStatus.S_SHIP));
             }
         }
-        // add ship to player
-        player.addShip(ship);
+        player.addShip(ship); // add ship to player
     }
 }

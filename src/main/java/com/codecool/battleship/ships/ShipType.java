@@ -8,6 +8,10 @@ public enum ShipType {
     DESTROYER(5);
     private final int shipLength;
 
+    public int getShipLength() {
+        return shipLength;
+    }
+
     ShipType(int shipLength) {
         this.shipLength = shipLength;
     }

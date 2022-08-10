@@ -6,8 +6,11 @@ import com.codecool.battleship.io.Input;
 import com.codecool.battleship.players.AbstractPlayer;
 import com.codecool.battleship.players.ComputerPlayerEasy;
 import com.codecool.battleship.players.UserPlayer;
+import com.codecool.battleship.ships.ShipType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Battleship {
 
@@ -19,7 +22,11 @@ public class Battleship {
     private final Board emptyBoard = new Board();
     private final Board playerOneBoard = new Board();
     private final Board playerTwoBoard = new Board();
-    private final int[] shipsToPlace = {5, 4, 3, 2, 1};
+    private final List<ShipType> shipTypeList = new ArrayList<ShipType>(
+            Arrays.asList(ShipType.DESTROYER, ShipType.SUBMARINE, ShipType.BATTLESHIP,
+                    ShipType.CRUISER, ShipType.CARRIER)
+    );
+    //    private final int[] shipsToPlace = {5, 4, 3, 2, 1};
     private int placementOption;
 
     public int getGamePhase() {
@@ -110,20 +117,20 @@ public class Battleship {
 
     private void placementPhase(Board board, int playerId) {
         System.out.println("placement phase");
-        for (int ship : shipsToPlace) {
+        for (ShipType ship : shipTypeList) {
             if (playerId == 1) display.printBoard(playerOneBoard, emptyBoard);
-                else display.printBoard(emptyBoard, playerTwoBoard);
+            else display.printBoard(emptyBoard, playerTwoBoard);
             if (playerId == 1) {
                 if (placementOption == 1) {
-                    playerOneBoard.manualPlacement(players[playerId - 1], board, ship, input);
+                    playerOneBoard.manualPlacement(players[playerId - 1], board, ship.getShipLength(), input);
                 } else {
-                    playerOneBoard.randomPlacement(ship);
+                    playerOneBoard.randomPlacement(ship.getShipLength());
                 }
             } else {
                 if (placementOption == 1 && gameMode == 1) {
-                    playerTwoBoard.manualPlacement(players[playerId - 1], board, ship, input);
+                    playerTwoBoard.manualPlacement(players[playerId - 1], board, ship.getShipLength(), input);
                 } else {
-                    playerTwoBoard.randomPlacement(ship);
+                    playerTwoBoard.randomPlacement(ship.getShipLength());
                 }
             }
         }

@@ -7,12 +7,23 @@ import java.util.Scanner;
 
 public class Input {
 
+    private final Display display = new Display();
+
     public boolean validateForBoardSize(int size) {
         return size < 10 || size > 20;
     }
 
+    public String askForDirection() {
+        display.print("1 - Horizontal | 2 - Vertical");
+        String direction = askForInput("Choose direction:");
+        while (!validateOption(direction)) {
+            direction = askForInput("Choose direction:");
+        }
+        return direction;
+    }
+
     public String askForInput(String label) {
-        System.out.println(label);
+        display.print(label);
         Scanner coordinates = new Scanner(System.in);
         return coordinates.nextLine().toUpperCase();
     }
@@ -25,8 +36,8 @@ public class Input {
         try {
             int[] coords = convertCoords(input);
             return isOnBoard(coords, boardSize) &&
-                    isSpaceForVertical(coords, board, boardSize, shipLength) &&
-                    isSpaceForHorizontal(coords, board, boardSize, shipLength);
+                    (isSpaceForVertical(coords, board, boardSize, shipLength) ||
+                    isSpaceForHorizontal(coords, board, boardSize, shipLength));
         } catch (Exception e) {
             return false;
         }
@@ -42,12 +53,12 @@ public class Input {
     }
 
     private boolean isNotOccupied(Board board, int[] coords) {
-        int[] tablica = {-1, 0, 1};
-        for (int i = 0; i < tablica.length; i++) {
-            for (int j = 0; j < tablica.length; j++) {
+        int[] fields = {-1, 0, 1};
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields.length; j++) {
                 try {
-                    if (board.getOcean()[coords[0] + tablica[i]][coords[1] + tablica[j]].getSquareStatus().equals(SquareStatus.S_SHIP)) {
-                        System.out.println("Can't place ship here!");
+                    if (board.getOcean()[coords[0] + fields[i]][coords[1] + fields[j]].getSquareStatus().equals(SquareStatus.S_SHIP)) {
+                        display.print("Can't place ship here!");
                         return false;
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {
@@ -58,12 +69,12 @@ public class Input {
         return true;
     }
 
-    private boolean isSpaceForHorizontal(int[] coords, Board board, int boardSize, int shipLength) {
-        if (coords[0] + shipLength > boardSize - 1) {
+    public boolean isSpaceForHorizontal(int[] coords, Board board, int boardSize, int shipLength) {
+        if (coords[0] + shipLength > boardSize) {
             return false;
         }
         for (int i = 0; i < shipLength; i++) {
-            coords[0] = coords[0] + i;
+            coords[0] += i;
             if (!isNotOccupied(board, coords)) {
                 return false;
             }
@@ -71,12 +82,12 @@ public class Input {
         return true;
     }
 
-    private boolean isSpaceForVertical(int[] coords, Board board, int boardSize, int shipLength) {
-        if (coords[1] + shipLength > boardSize - 1) {
+    public boolean isSpaceForVertical(int[] coords, Board board, int boardSize, int shipLength) {
+        if (coords[1] + shipLength > boardSize) {
             return false;
         }
         for (int i = 0; i < shipLength; i++) {
-            coords[1] = coords[1] + i;
+            coords[1] += i;
             if (!isNotOccupied(board, coords)) {
                 return false;
             }
@@ -97,12 +108,11 @@ public class Input {
         String input = askForInput(label);
 
         while (!validateCords(input, board, boardSize, shipSize)) {
-            System.out.println("WRONG COORDS");
+            display.print("WRONG COORDS");
             input = askForInput(label);
         }
         return convertCoords(input);
     }
-
 
 }
 
