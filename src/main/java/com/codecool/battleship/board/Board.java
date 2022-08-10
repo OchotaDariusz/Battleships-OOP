@@ -1,7 +1,8 @@
 package com.codecool.battleship.board;
 
-
 import com.codecool.battleship.io.Input;
+import com.codecool.battleship.players.AbstractPlayer;
+import com.codecool.battleship.ships.Ship;
 
 public class Board implements BoardFactory {
 
@@ -54,21 +55,27 @@ public class Board implements BoardFactory {
     }
 
     @Override
-    public void manualPlacement(Board board, int shipSize, Input input) {
+    public void manualPlacement(AbstractPlayer player, Board board, int shipSize, Input input) {
+
+        Ship ship = new Ship();
+
         int[] coords = input.askForCords("Place your ship", board, BOARD_SIZE, shipSize);
 //            pobranie kierunku + validacja
         int x = coords[0], y = coords[1];
         ocean[x][y].setSquareStatus(SquareStatus.S_SHIP);
+//        ship.addCords(new Square(x, y, SquareStatus.S_SHIP));
 
         boolean horizontal = true; // over
         for (int i = 0; i < shipSize; i++) {
             if (horizontal) {
                 ocean[x + i][y].setSquareStatus(SquareStatus.S_SHIP);
+                ship.addCords(new Square(x + i, y, SquareStatus.S_SHIP));
             } else {
                 ocean[x][y + i].setSquareStatus(SquareStatus.S_SHIP);
+                ship.addCords(new Square(x, y + i, SquareStatus.S_SHIP));
             }
         }
-
-
+        // add ship to player
+        player.addShip(ship);
     }
 }

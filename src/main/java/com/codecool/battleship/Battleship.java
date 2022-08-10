@@ -7,6 +7,8 @@ import com.codecool.battleship.players.AbstractPlayer;
 import com.codecool.battleship.players.ComputerPlayerEasy;
 import com.codecool.battleship.players.UserPlayer;
 
+import java.util.Arrays;
+
 public class Battleship {
 
     private final Display display = new Display();
@@ -18,8 +20,6 @@ public class Battleship {
     private final Board playerOneBoard = new Board();
     private final Board playerTwoBoard = new Board();
     private final int[] shipsToPlace = {5, 4, 3, 2, 1};
-
-
     private int placementOption;
 
     public int getGamePhase() {
@@ -102,6 +102,7 @@ public class Battleship {
             System.out.println("shooting phase");
             // shooting phase
             // get input
+            System.out.println(players[playerId - 1].getShips());
             String cos = input.askForInput("pauza");
         }
 
@@ -114,13 +115,13 @@ public class Battleship {
                 else display.printBoard(emptyBoard, playerTwoBoard);
             if (playerId == 1) {
                 if (placementOption == 1) {
-                    playerOneBoard.manualPlacement(board, ship, input);
+                    playerOneBoard.manualPlacement(players[playerId - 1], board, ship, input);
                 } else {
                     playerOneBoard.randomPlacement(ship);
                 }
             } else {
                 if (placementOption == 1 && gameMode == 1) {
-                    playerTwoBoard.manualPlacement(board, ship, input);
+                    playerTwoBoard.manualPlacement(players[playerId - 1], board, ship, input);
                 } else {
                     playerTwoBoard.randomPlacement(ship);
                 }
@@ -166,7 +167,6 @@ public class Battleship {
         }
         placement = Integer.parseInt(option);
         setPlacementOption(placement);
-
     }
 
     private void setupPlayers() {
