@@ -1,5 +1,8 @@
 package com.codecool.battleship.io;
 
+import com.codecool.battleship.board.Board;
+import com.codecool.battleship.board.SquareStatus;
+
 import java.util.Scanner;
 
 public class Input {
@@ -18,16 +21,67 @@ public class Input {
         return input.equals("1") || input.equals("2");
     }
 
-
-
-    public boolean validateCoords(String input, int size) {
+    private boolean validateCords(String input, Board board, int boardSize, int shipLength) {
         try {
             int[] coords = convertCoords(input);
-            return ((coords[0] <= size - 1 && coords[0] >= 0) &&
-                    (coords[1] <= size - 1 && coords[1] >= 0));
+            return isOnBoard(coords, boardSize) &&
+                    isSpaceForVertical(coords, board, boardSize, shipLength) &&
+                    isSpaceForHorizontal(coords, board, boardSize, shipLength);
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private boolean isOnBoard(int[] coords, int boardSize) {
+        try {
+            return ((coords[0] <= boardSize - 1 && coords[0] >= 0) &&
+                    (coords[1] <= boardSize - 1 && coords[1] >= 0));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean isNotOccupied(Board board, int[] coords) {
+        int[] tablica = {-1, 0, 1};
+        for (int i = 0; i < tablica.length; i++) {
+            for (int j = 0; j < tablica.length; j++) {
+                try {
+                    if (board.getOcean()[coords[0] + tablica[i]][coords[1] + tablica[j]].getSquareStatus().equals(SquareStatus.S_SHIP)) {
+                        return false;
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("out of bound");
+                    continue;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isSpaceForHorizontal(int[] coords, Board board, int boardSize, int shipLength) {
+        if (coords[0] + shipLength > boardSize - 1) {
+            return false;
+        }
+        for (int i = 0; i < shipLength; i++) {
+            coords[0] = coords[0] + i;
+            if (!isNotOccupied(board, coords)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isSpaceForVertical(int[] coords, Board board, int boardSize, int shipLength) {
+        if (coords[1] + shipLength > boardSize - 1) {
+            return false;
+        }
+        for (int i = 0; i < shipLength; i++) {
+            coords[1] = coords[1] + i;
+            if (!isNotOccupied(board, coords)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int[] convertCoords(String input) {
@@ -39,15 +93,15 @@ public class Input {
         return coords;
     }
 
-    public int[] askForCords(String label,int size){
+    public int[] askForCords(String label, Board board, int boardSize, int shipSize) {
         String input = askForInput(label);
-        while(!validateCoords(input,size)){
+
+        while (!validateCords(input, board, boardSize, shipSize)) {
             input = askForInput(label);
         }
 
         return convertCoords(input);
     }
-
 
 
 }

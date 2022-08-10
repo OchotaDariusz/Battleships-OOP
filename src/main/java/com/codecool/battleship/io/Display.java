@@ -21,6 +21,8 @@ public class Display {
 
     public void printBoard(Board board1, Board board2) {
         System.out.println("Board");
+        System.out.println(board1);
+        System.out.println(board2);
     }
 
     public void printGameplay() {

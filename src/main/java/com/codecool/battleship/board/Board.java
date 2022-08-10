@@ -7,13 +7,17 @@ public class Board implements BoardFactory {
 
     final int BOARD_SIZE = 10;
 
-    private Square[][] ocean;
+    private final Square[][] ocean;
+
+    public Square[][] getOcean() {
+        return ocean;
+    }
 
     public Board() {
         ocean = new Square[BOARD_SIZE][BOARD_SIZE];
         for (int x = 0; x < BOARD_SIZE; x++)
             for (int y = 0; y < BOARD_SIZE; y++)
-                ocean[x][y] = new Square(x, y, Square.Status.S_EMPTY);
+                ocean[x][y] = new Square(x, y, SquareStatus.S_EMPTY);
     }
 
     boolean isPlacementOk(int px, int py) {
@@ -23,7 +27,7 @@ public class Board implements BoardFactory {
             for (int y = py - 1; y < py + 1; y++) {
                 x = Math.min(BOARD_SIZE - 1, Math.max(0, x));
                 y = Math.min(BOARD_SIZE - 1, Math.max(0, y));
-                if (ocean[x][y].getSquareStatus() != Square.Status.S_EMPTY)
+                if (ocean[x][y].getSquareStatus() != SquareStatus.S_EMPTY)
                     return false;
             }
 
@@ -36,7 +40,7 @@ public class Board implements BoardFactory {
         if (!this.isPlacementOk(x, y)) {
             return false;
         }
-        ocean[x][y] = new Square(x, y, Square.Status.S_SHIP);
+        ocean[x][y] = new Square(x, y, SquareStatus.S_SHIP);
         return true;
     }
 
@@ -136,18 +140,18 @@ public class Board implements BoardFactory {
     }
 
     @Override
-    public void manualPlacement(int shipSize, Input input) {
-        int [] coords = input.askForCords("Place your ship",BOARD_SIZE);
-        coords = input.askForCords("Place your ship",BOARD_SIZE);//        wskazanie miejsca + validacja
+    public void manualPlacement(Board board, int shipSize, Input input) {
+        int[] coords = input.askForCords("Place your ship", board, BOARD_SIZE, shipSize);
 //            pobranie kierunku + validacja
         int x = coords[0], y = coords[1];
-        ocean[x][y].setSquareStatus(Square.Status.S_SHIP);
-        boolean horizontal= true;
+        ocean[x][y].setSquareStatus(SquareStatus.S_SHIP);
+
+        boolean horizontal = true; // over
         for (int i = 0; i < shipSize; i++) {
             if (horizontal) {
-                ocean[x+i][y].setSquareStatus(Square.Status.S_SHIP);
+                ocean[x + i][y].setSquareStatus(SquareStatus.S_SHIP);
             } else {
-                ocean[x][y+i].setSquareStatus(Square.Status.S_SHIP);
+                ocean[x][y + i].setSquareStatus(SquareStatus.S_SHIP);
             }
         }
 

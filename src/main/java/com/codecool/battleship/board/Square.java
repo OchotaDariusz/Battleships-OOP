@@ -1,54 +1,34 @@
 package com.codecool.battleship.board;
 
 public class Square {
-    private int X;
-    private int Y;
-    private Status SquareStatus;
+    private final int x;
+    private final int y;
+    private SquareStatus squareStatus;
 
-    public void setSquareStatus(Status squareStatus) {
-        SquareStatus = squareStatus;
+    public void setSquareStatus(SquareStatus squareStatus) {
+        this.squareStatus = squareStatus;
     }
 
-    public enum Status {
-        S_EMPTY,
-        S_SHIP,
-        S_HIT,
-        S_MISS;
-
-        public char GetCharacter() {
-            if (this == Status.S_SHIP) {
-                return '*';
-            }
-            if (this == Status.S_HIT) {
-                return 'x';
-            }
-            if (this == Status.S_MISS) {
-                return 'o';
-            }
-            return ' ';
-        }
-    }
-
-    public Status getSquareStatus() {
-        return SquareStatus;
+    public SquareStatus getSquareStatus() {
+        return squareStatus;
     }
 
     public int getX() {
-        return X;
+        return x;
     }
 
     public int getY() {
-        return Y;
+        return y;
     }
 
-    public Square(int x, int y, Status status) {
-        X = x;
-        Y = y;
-        SquareStatus = status;
+    public Square(int x, int y, SquareStatus status) {
+        this.x = x;
+        this.y = y;
+        squareStatus = status;
     }
 
     @Override
     public String toString() {
-        return Character.toString(this.SquareStatus.GetCharacter());
+        return Character.toString(this.squareStatus.getCharacter());
     }
 }

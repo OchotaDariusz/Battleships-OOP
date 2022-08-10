@@ -7,16 +7,12 @@ import com.codecool.battleship.players.AbstractPlayer;
 import com.codecool.battleship.players.ComputerPlayerEasy;
 import com.codecool.battleship.players.UserPlayer;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 public class Battleship {
 
     private final Display display = new Display();
     private final Input input = new Input();
     private int gameMode;  // 1 - player vs player | 2 - player vs computer
-    private int gamePhase;  // 1 - placement phase | 2 - shooting phase
+    private int gamePhase = 1;  // 1 - placement phase | 2 - shooting phase
     private final AbstractPlayer[] players = new AbstractPlayer[2];
     private final Board playerOneBoard = new Board();
     private final Board playerTwoBoard = new Board();
@@ -50,10 +46,13 @@ public class Battleship {
     }
 
     private void mainLoop() {
-        int playerId = 0;
+        Board board;
+        int playerId = 1;
         System.out.println("Main Loop");
         while (!checkIfWon()) {
-            makeMove(playerId);
+            display.printBoard(playerOneBoard, playerTwoBoard);
+            board = (playerId == 1) ? playerOneBoard : playerTwoBoard;
+            makeMove(board, playerId);
 
             if (checkIfHit()) {
                 if (checkIfShipSunk()) {
@@ -61,7 +60,7 @@ public class Battleship {
                     System.out.println("Ship has been sunken");
                 }
             } else {
-                playerId = (playerId == 0) ? 1 : 0;
+                playerId = (playerId == 1) ? 2 : 1;
             }
         }
         displayHighScores(playerId);
@@ -91,35 +90,39 @@ public class Battleship {
         System.exit(0);
     }
 
-    private void makeMove(int playerId) {
+    private void makeMove(Board board, int playerId) {
         System.out.println("Make Move(Play Turn)");
         if (getGamePhase() == 1) {
-            System.out.println("placement phase");
-            for (int ship : shipsToPlace) {
-                if (playerId == 1) {
-                    if (placementOption == 1) {
-                        playerOneBoard.manualPlacement(ship);
-                    } else {
-                        playerOneBoard.randomPlacement(ship);
-                    }
-                } else {
-                    if (placementOption == 1 && gameMode == 1) {
-                        playerTwoBoard.manualPlacement(ship);
-                    } else {
-                        playerTwoBoard.randomPlacement(ship);
-                    }
-                }
-            }
-
-            // placement phase
-            // get input -> place ship * amount of ships
-            // input.askForInput("Please enter coordinates: ")
+            placementPhase(board, playerId);
         } else {
             System.out.println("shooting phase");
             // shooting phase
             // get input
+            String cos = input.askForInput("pauza");
         }
 
+    }
+
+    private void placementPhase(Board board, int playerId) {
+        System.out.println("placement phase");
+        for (int ship : shipsToPlace) {
+            if (playerId == 1) {
+                if (placementOption == 1) {
+                    playerOneBoard.manualPlacement(board, ship, input);
+                } else {
+                    playerOneBoard.randomPlacement(ship);
+                }
+            } else {
+                if (placementOption == 1 && gameMode == 1) {
+                    playerTwoBoard.manualPlacement(board, ship, input);
+                } else {
+                    playerTwoBoard.randomPlacement(ship);
+                }
+            }
+        }
+        if (playerId == 2 && getGamePhase() == 1) {
+            setGamePhase(2);
+        }
     }
 
     private boolean checkIfHit() {
