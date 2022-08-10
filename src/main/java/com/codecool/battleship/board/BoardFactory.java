@@ -5,7 +5,7 @@ import com.codecool.battleship.players.AbstractPlayer;
 
 public interface BoardFactory {
 
-    void randomPlacement(int shipSize);
+    void randomPlacement(AbstractPlayer player, Board board, int shipSize);
 
     void manualPlacement(AbstractPlayer player, Board board, int shipSize, Input input);
 }

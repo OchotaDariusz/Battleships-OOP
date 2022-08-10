@@ -124,13 +124,13 @@ public class Battleship {
                 if (placementOption == 1) {
                     playerOneBoard.manualPlacement(players[playerId - 1], board, ship.getShipLength(), input);
                 } else {
-                    playerOneBoard.randomPlacement(ship.getShipLength());
+                    playerOneBoard.randomPlacement(players[playerId - 1], board, ship.getShipLength());
                 }
             } else {
                 if (placementOption == 1 && gameMode == 1) {
                     playerTwoBoard.manualPlacement(players[playerId - 1], board, ship.getShipLength(), input);
                 } else {
-                    playerTwoBoard.randomPlacement(ship.getShipLength());
+                    playerTwoBoard.randomPlacement(players[playerId - 1], board, ship.getShipLength());
                 }
             }
         }
