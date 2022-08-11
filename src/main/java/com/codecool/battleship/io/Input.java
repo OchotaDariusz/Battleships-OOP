@@ -3,6 +3,7 @@ package com.codecool.battleship.io;
 import com.codecool.battleship.board.Board;
 import com.codecool.battleship.board.SquareStatus;
 
+import javax.xml.stream.events.Characters;
 import java.util.Scanner;
 
 public class Input {
@@ -25,22 +26,38 @@ public class Input {
     public String askForInput(String label) {
         display.print(label);
         Scanner coordinates = new Scanner(System.in);
-
         return coordinates.nextLine().toUpperCase();
     }
 
-    public int[] askForInput2(String label, int boardSize) {
+    public int[] askForShootingCoords(String label, int boardSize) {
         display.print(label);
         Scanner coordinates = new Scanner(System.in);
-        int[] coords;
-        do {
-            coords = convertCoords(coordinates.nextLine().toUpperCase());
-            if (!isOnBoard(coords, boardSize))
-                System.out.println("Invalid input 38");
-        } while (!isOnBoard(coords, boardSize));
+        String input = coordinates.nextLine().toUpperCase();
+        while (!validateShoot(input)) {
+            display.print("wrong coordinates!");
+            input = coordinates.nextLine().toUpperCase();
+        }
+        int[] coords= convertCoords(input);
+
         return coords;
     }
 
+    private boolean validateShoot(String coords) {
+        if (!String.valueOf(coords.charAt(0)).matches("\\D") || coords.length() > 3 || isDigit(String.valueOf(coords.charAt(0))) ) {
+
+            return false;
+        }
+        return isDigit(coords.substring(1));
+
+    }
+    public boolean isDigit(String input){
+        try {
+            Integer.parseInt(input);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
     public boolean validateOption(String input) {
         return input.equals("1") || input.equals("2");
     }

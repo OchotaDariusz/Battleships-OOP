@@ -11,7 +11,6 @@ import com.codecool.battleship.ships.ShipType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class Battleship {
 
@@ -112,10 +111,10 @@ public class Battleship {
         } else {
             System.out.println("shooting phase");
             if (playerId == 1) {
-                int[] shootCoords = input.askForInput2("gimi coords", board.getBoardSize());
+                int[] shootCoords = input.askForShootingCoords("gimi coords", board.getBoardSize());
                 return player.makeMove(playerTwoBoard, emptyBoard, shootCoords, players[1]);
             } else {
-                int[] shootCoords = input.askForInput2("gimi coords", board.getBoardSize());
+                int[] shootCoords = input.askForShootingCoords("gimi coords", board.getBoardSize());
                 return player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
             }
         }
