@@ -18,7 +18,8 @@ public class Ship {
                 "coords=" + coords +
                 '}';
     }
-    public int getShipSize(){
+
+    public int getShipSize() {
         return coords.size();
     }
 

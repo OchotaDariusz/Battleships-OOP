@@ -25,7 +25,7 @@ public abstract class AbstractPlayer {
         return ships.size() != 0;
     }
 
-    public void setSquareToHit(int[] cords,Square[][] ocean) {
+    public void setSquareToHit(int[] cords, Square[][] ocean) {
         List<Ship> ships = getShips();
 
         for (Ship ship : ships) {
@@ -36,7 +36,7 @@ public abstract class AbstractPlayer {
                 }
             }
             if (isShipSunked(ship)) {
-                removeShip(ship,ocean);
+                removeShip(ship, ocean);
                 break;
             }
         }
@@ -50,8 +50,8 @@ public abstract class AbstractPlayer {
         return true;
     }
 
-    public void removeShip(Ship ship,Square[][] ocean) {
-        for(Square square:ship.getCoords()){
+    public void removeShip(Ship ship, Square[][] ocean) {
+        for (Square square : ship.getCoords()) {
             ocean[square.getX()][square.getY()].setSquareStatus(SquareStatus.S_SUNK);
         }
         ships.remove(ship);
@@ -71,7 +71,7 @@ public abstract class AbstractPlayer {
 
         if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_SHIP) {
             empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
-            opponent.setSquareToHit(coords,empty);
+            opponent.setSquareToHit(coords, empty);
             return true;
 
         } else if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_EMPTY) {

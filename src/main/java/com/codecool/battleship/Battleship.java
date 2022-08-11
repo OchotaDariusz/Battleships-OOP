@@ -29,7 +29,7 @@ public class Battleship {
             Arrays.asList(ShipType.DESTROYER, ShipType.SUBMARINE, ShipType.BATTLESHIP,
                     ShipType.CRUISER, ShipType.CARRIER)
     );
-    //    private final int[] shipsToPlace = {5, 4, 3, 2, 1};
+
     private int placementOption;
 
     public int getGamePhase() {
@@ -79,7 +79,6 @@ public class Battleship {
             }
         }
         displayHighScores(playerId);
-        // press any key to end game
         exit();
     }
 
@@ -145,8 +144,6 @@ public class Battleship {
             setGamePhase(2);
         }
     }
-
-
 
     private boolean checkIfWon(int playerId) {
         if(getGamePhase()==2){

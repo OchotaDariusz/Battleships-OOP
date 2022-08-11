@@ -3,7 +3,6 @@ package com.codecool.battleship.io;
 import com.codecool.battleship.board.Board;
 import com.codecool.battleship.board.SquareStatus;
 
-import javax.xml.stream.events.Characters;
 import java.util.Scanner;
 
 public class Input {
@@ -37,20 +36,21 @@ public class Input {
             display.print("wrong coordinates!");
             input = coordinates.nextLine().toUpperCase();
         }
-        int[] coords= convertCoords(input);
+        int[] coords = convertCoords(input);
 
         return coords;
     }
 
     private boolean validateShoot(String coords) {
-        if (!String.valueOf(coords.charAt(0)).matches("\\D") || coords.length() > 3 || isDigit(String.valueOf(coords.charAt(0))) ) {
+        if (!String.valueOf(coords.charAt(0)).matches("\\D") || coords.length() > 3 || isDigit(String.valueOf(coords.charAt(0)))) {
 
             return false;
         }
         return isDigit(coords.substring(1));
 
     }
-    public boolean isDigit(String input){
+
+    public boolean isDigit(String input) {
         try {
             Integer.parseInt(input);
         } catch (Exception e) {
@@ -58,6 +58,7 @@ public class Input {
         }
         return true;
     }
+
     public boolean validateOption(String input) {
         return input.equals("1") || input.equals("2");
     }
