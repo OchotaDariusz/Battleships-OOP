@@ -3,10 +3,7 @@ package com.codecool.battleship;
 import com.codecool.battleship.board.Board;
 import com.codecool.battleship.io.Display;
 import com.codecool.battleship.io.Input;
-import com.codecool.battleship.players.AbstractComputerPlayer;
-import com.codecool.battleship.players.AbstractPlayer;
-import com.codecool.battleship.players.ComputerPlayerEasy;
-import com.codecool.battleship.players.UserPlayer;
+import com.codecool.battleship.players.*;
 import com.codecool.battleship.ships.ShipType;
 
 import java.util.ArrayList;
@@ -108,7 +105,6 @@ public class Battleship {
             placementPhase(board, playerId);
         } else {
             display.print("Shooting phase");
-//            int[] shootCoords = input.askForShootingCoords("Choose field to shoot", board.getBoardSize());
             int[] shootCoords;
             if (getGameMode() == 2 && playerId == 2) {
                 // random coords for Computer AI
@@ -119,6 +115,15 @@ public class Battleship {
             if (playerId == 1) {
                 return player.makeMove(playerTwoBoard, emptyBoard, shootCoords, players[1]);
             } else {
+                if (getGameMode() == 2) {
+                    boolean hitted = player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
+                    if (hitted) {
+                        ((AbstractComputerPlayer)player).addShootedFields(shootCoords);
+                    }
+                    System.out.println("Used FIelds " + ((AbstractComputerPlayer)player).getUsedFields());
+                    System.out.println("shooted fields " + ((AbstractComputerPlayer)player).getShootedFields());
+                    System.out.println("sunken ship fields " + ((AbstractComputerPlayer)player).getSunkenShipsFields());
+                }
                 return player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
             }
         }
@@ -179,7 +184,7 @@ public class Battleship {
         display.printPlacementOption();
         String option = input.askForInput("Choose placement option: ");
         int placement;
-        while (!input.validateOption(option)) {
+        while (!input.validateOption(option) && !option.equals("0")) {
             System.out.println("Wrong input!");
             option = input.askForInput("Choose placement option: ");
         }
@@ -193,7 +198,8 @@ public class Battleship {
         if (getGameMode() == 1) {
             players[1] = new UserPlayer();
         } else {
-            players[1] = new ComputerPlayerEasy();
+//            players[1] = new ComputerPlayerEasy();
+            players[1] = new ComputerPlayerNormal();
         }
     }
 

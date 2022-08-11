@@ -1,8 +1,6 @@
 
 package com.codecool.battleship.players;
 
-import java.util.List;
-
 public class ComputerPlayerEasy extends AbstractComputerPlayer {
 
     @Override

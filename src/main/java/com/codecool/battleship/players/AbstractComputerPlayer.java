@@ -1,5 +1,7 @@
 package com.codecool.battleship.players;
 
+import com.codecool.battleship.board.SquareStatus;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,10 +10,32 @@ import java.util.Random;
 public abstract class AbstractComputerPlayer extends AbstractPlayer {
 
     private final List<int[]> usedFields = new ArrayList<>();
+    private final List<int[]> shootedFields = new ArrayList<>();
+    private final List<int[]> sunkenShipsFields = new ArrayList<>();
     private final Random RANDOM = new Random();
 
     public Random getRANDOM() {
         return RANDOM;
+    }
+
+    public List<int[]> getUsedFields() {
+        return usedFields;
+    }
+
+    public List<int[]> getShootedFields() {
+        return shootedFields;
+    }
+
+    public List<int[]> getSunkenShipsFields() {
+        return sunkenShipsFields;
+    }
+
+    public void addShootedFields(int[] coords) {
+        shootedFields.add(coords);
+    }
+
+    public void addSunkenShipsFields(int[] coords) {
+        sunkenShipsFields.add(coords);
     }
 
     public void addUsedField(int[] coords) {
@@ -27,6 +51,23 @@ public abstract class AbstractComputerPlayer extends AbstractPlayer {
             }
         }
         return false;
+    }
+
+    public void addToUsedFieldsAfterSunk() {
+        int[] fields = {-1, 0, 1};
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields.length; j++) {
+                try {
+                    for (int[] field : sunkenShipsFields) {
+                        field[0] += i;
+                        field[1] += j;
+                        addUsedField(field);
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    continue;
+                }
+            }
+        }
     }
 
 }

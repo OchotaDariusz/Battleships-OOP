@@ -61,7 +61,7 @@ public class Input {
     }
 
     public boolean validateOption(String input) {
-        return input.equals("1") || input.equals("2");
+        return input.equals("1") || input.equals("2") || input.equals("0");
     }
 
     private boolean validateCords(String input, Board board, int boardSize, int shipLength) {

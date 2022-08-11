@@ -24,7 +24,7 @@ public abstract class AbstractPlayer {
         return ships.size() != 0;
     }
 
-    public void setSquareToHit(int[] cords, Square[][] ocean, Square[][] emptyOcean) {
+    public void setSquareToHit(int[] cords, Square[][] ocean, Square[][] emptyOcean, AbstractPlayer player) {
         List<Ship> ships = getShips();
 
         for (Ship ship : ships) {
@@ -35,7 +35,7 @@ public abstract class AbstractPlayer {
                 }
             }
             if (isShipSunked(ship)) {
-                removeShip(ship, ocean, emptyOcean);
+                removeShip(ship, ocean, emptyOcean, player);
                 break;
             }
         }
@@ -49,10 +49,16 @@ public abstract class AbstractPlayer {
         return true;
     }
 
-    public void removeShip(Ship ship, Square[][] ocean, Square[][] emptyOcean) {
+    public void removeShip(Ship ship, Square[][] ocean, Square[][] emptyOcean, AbstractPlayer player) {
         for (Square square : ship.getCoords()) {
             ocean[square.getX()][square.getY()].setSquareStatus(SquareStatus.S_SUNK);
             emptyOcean[square.getX()][square.getY()].setSquareStatus(SquareStatus.S_SUNK);
+            if (player instanceof AbstractComputerPlayer) {
+                ((AbstractComputerPlayer)player).addSunkenShipsFields(new int[]{square.getX(), square.getY()});
+                if (player instanceof ComputerPlayerNormal) {
+                    ((AbstractComputerPlayer)player).addToUsedFieldsAfterSunk();
+                }
+            }
         }
         ships.remove(ship);
     }
@@ -71,7 +77,7 @@ public abstract class AbstractPlayer {
         if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_SHIP) {
             empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
             ocean[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
-            opponent.setSquareToHit(coords, empty, ocean);
+            opponent.setSquareToHit(coords, empty, ocean, this);
             return true;
 
         } else if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_EMPTY) {
