@@ -62,6 +62,7 @@ public class Battleship {
 
         int playerId = 1;
         System.out.println("Main Loop");
+        boolean flag;
         while (!checkIfWon()) {
             if (getGamePhase() == 2) {
                 if (playerId == 1) display.printBoard(playerOneBoard, emptyBoard);
@@ -69,12 +70,12 @@ public class Battleship {
             }
             board = (playerId == 1) ? playerOneBoard : playerTwoBoard;
             if (playerId == 1) {
-                makeMove(board, playerId, players[0]);
+                flag=makeMove(board, playerId, players[0]);
             } else {
-                makeMove(board, playerId, players[1]);
+                flag=makeMove(board, playerId, players[1]);
             }
 
-            if (checkIfHit()) {
+            if (flag) {
                 if (checkIfShipSunk()) {
                     //update ship character to Sunk and take from players ship that sunken ship
                     System.out.println("Ship has been sunken");
@@ -96,7 +97,6 @@ public class Battleship {
     public void startGame() {
         System.out.println("Start Game");
         chooseGameMode(this);
-
         mainLoop();
     }
 
@@ -110,7 +110,7 @@ public class Battleship {
         System.exit(0);
     }
 
-    private void makeMove(Board board, int playerId, AbstractPlayer player) {
+    private boolean makeMove(Board board, int playerId, AbstractPlayer player) {
         System.out.println("Make Move(Play Turn)");
         if (getGamePhase() == 1) {
             placementPhase(board, playerId);
@@ -118,18 +118,16 @@ public class Battleship {
             System.out.println("shooting phase");
             if (playerId == 1) {
                 int[] shootCoords = input.askForInput2("gimi coords", board.getBoardSize());
-                player.makeMove(playerTwoBoard, emptyBoard, shootCoords, players[1]);
+                return player.makeMove(playerTwoBoard, emptyBoard, shootCoords, players[1]);
             } else {
                 int[] shootCoords = input.askForInput2("gimi coords", board.getBoardSize());
-                player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
+                return player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
             }
-            String cos = input.askForInput("pauza");
         }
-
+        return false;
     }
 
     private void placementPhase(Board board, int playerId) {
-
         System.out.println("placement phase");
         for (ShipType ship : shipTypeList) {
             if (playerId == 1) display.printBoard(playerOneBoard, emptyBoard);
@@ -154,10 +152,6 @@ public class Battleship {
         }
     }
 
-    private boolean checkIfHit() {
-
-        return true;
-    }
 
     private boolean checkIfShipSunk() {
         return false;

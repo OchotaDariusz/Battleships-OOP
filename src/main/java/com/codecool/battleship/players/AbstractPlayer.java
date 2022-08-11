@@ -25,23 +25,19 @@ public abstract class AbstractPlayer {
         return ships.size() != 0;
     }
 
-    public void setSquareToHit(int[] cords) {
+    public void setSquareToHit(int[] cords,Square[][] ocean) {
         List<Ship> ships = getShips();
 
         for (Ship ship : ships) {
             List<Square> shipCoords = ship.getCoords();
-
             for (Square square : shipCoords) {
-
                 if (cords[0] == square.getX() && cords[1] == square.getY()) {
                     square.setSquareStatus(SquareStatus.S_HIT);
-
                 }
             }
             if (isShipSunked(ship)) {
-                removeShip(ship);
+                removeShip(ship,ocean);
                 System.out.println("zatonął");
-//
                 break;
             }
         }
@@ -55,7 +51,10 @@ public abstract class AbstractPlayer {
         return true;
     }
 
-    public void removeShip(Ship ship) {
+    public void removeShip(Ship ship,Square[][] ocean) {
+        for(Square square:ship.getCoords()){
+            ocean[square.getX()][square.getY()].setSquareStatus(SquareStatus.S_SUNK);
+        }
         ships.remove(ship);
     }
 
@@ -67,8 +66,19 @@ public abstract class AbstractPlayer {
                 '}';
     }
 
-    public abstract void makeMove(Board opponentBord, Board emptyBoard, int[] coords, AbstractPlayer opponent);
+    public boolean makeMove(Board opponentBord, Board emptyBoard, int[] coords, AbstractPlayer opponent) {
+        Square ocean[][] = opponentBord.getOcean();
+        Square empty[][] = emptyBoard.getOcean();
 
-    abstract void makeMove();
+        if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_SHIP) {
+            empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
+            opponent.setSquareToHit(coords,empty);
+            return true;
 
+        } else if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_EMPTY) {
+            empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_MISS);
+        }
+
+        return false;
+    }
 }
