@@ -18,7 +18,7 @@ public abstract class AbstractComputerPlayer extends AbstractPlayer {
         return RANDOM;
     }
 
-    public List<int[]> getUsedFields() {
+    public List<int[]> getUsedFields() { //TODO: DELETE
         return usedFields;
     }
 
@@ -26,8 +26,12 @@ public abstract class AbstractComputerPlayer extends AbstractPlayer {
         return shootedFields;
     }
 
-    public List<int[]> getSunkenShipsFields() {
+    public List<int[]> getSunkenShipsFields() { //TODO: DELETE
         return sunkenShipsFields;
+    }
+
+    public void clearHittedFields() {
+        shootedFields.clear();
     }
 
     public void addShootedFields(int[] coords) {
@@ -59,8 +63,8 @@ public abstract class AbstractComputerPlayer extends AbstractPlayer {
             for (int j = 0; j < fields.length; j++) {
                 try {
                     for (int[] field : sunkenShipsFields) {
-                        field[0] += i;
-                        field[1] += j;
+                        field[0] += fields[i];
+                        field[1] += fields[j];
                         addUsedField(field);
                     }
                 } catch (ArrayIndexOutOfBoundsException e) {

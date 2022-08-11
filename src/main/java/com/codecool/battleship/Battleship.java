@@ -120,9 +120,10 @@ public class Battleship {
                     if (hitted) {
                         ((AbstractComputerPlayer)player).addShootedFields(shootCoords);
                     }
-                    System.out.println("Used FIelds " + ((AbstractComputerPlayer)player).getUsedFields());
-                    System.out.println("shooted fields " + ((AbstractComputerPlayer)player).getShootedFields());
-                    System.out.println("sunken ship fields " + ((AbstractComputerPlayer)player).getSunkenShipsFields());
+                    System.out.println("Used FIelds " + ((AbstractComputerPlayer)player).getUsedFields()); //TODO: DELETE
+                    System.out.println("shooted fields " + ((AbstractComputerPlayer)player).getShootedFields()); //TODO: DELETE
+                    System.out.println("sunken ship fields " + ((AbstractComputerPlayer)player).getSunkenShipsFields()); //TODO: DELETE
+                    return hitted;
                 }
                 return player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
             }
@@ -174,6 +175,7 @@ public class Battleship {
             display.print("Wrong input!");
             userInput = input.askForInput("Choose game mode: ");
         }
+        if (userInput.equals("0")) exit();
         gameMode = Integer.parseInt(userInput);
         battleship.setGameMode(gameMode);
         setupPlayers();
@@ -199,7 +201,8 @@ public class Battleship {
             players[1] = new UserPlayer();
         } else {
 //            players[1] = new ComputerPlayerEasy();
-            players[1] = new ComputerPlayerNormal();
+//            players[1] = new ComputerPlayerNormal();
+            players[1] = new ComputerPlayerHard();
         }
     }
 

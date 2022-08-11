@@ -1,9 +1,54 @@
 package com.codecool.battleship.players;
 
+import java.util.Arrays;
+
 public class ComputerPlayerHard extends AbstractComputerPlayer {
 
     @Override
     public int[] getRandomCoords(int boardSize) {
-        return new int[0];
+        int counter = 0;
+        int[] coords = new int[2];
+        do {
+            counter++;
+            if (counter == 9) {
+                this.clearHittedFields();
+            }
+            if (getShootedFields().size() > 0) {
+                coords = getNearFieldToShoot();
+                System.out.println("Near field to shoot " + Arrays.toString(coords));
+            } else {
+                coords[0] = getRANDOM().nextInt(1, boardSize);
+                coords[1] = getRANDOM().nextInt(1, boardSize);
+            }
+        } while (checkIfUsed(coords));
+
+        addUsedField(coords);
+        return coords;
     }
+
+    private int[] getNearFieldToShoot() {
+        int[] fields = {-1, 0, 1};
+        for (int i = 0; i < fields.length; i++) {
+            for (int j = 0; j < fields.length; j++) {
+                try {
+                    int[] field = getShootedFields().get(getShootedFields().size() - 1);
+                    int[] fieldToShoot = new int[2];
+                    System.out.println("ostatnio trafil tu: " + Arrays.toString(field));
+                    System.out.println("shooted fields: " + getShootedFields());
+                    fieldToShoot[0] = field[0] + fields[i];
+                    fieldToShoot[1] = field[1] + fields[j];
+                    if (!checkIfUsed(fieldToShoot)) {
+                        System.out.println("wlazł tu");
+                        System.out.println("a tu strzeli: " + Arrays.toString(fieldToShoot));
+                        return fieldToShoot;
+                    }
+
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    continue;
+                }
+            }
+        }
+        return new int[]{1, 1};
+    }
+
 }

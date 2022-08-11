@@ -36,6 +36,9 @@ public abstract class AbstractPlayer {
             }
             if (isShipSunked(ship)) {
                 removeShip(ship, ocean, emptyOcean, player);
+                if (this instanceof ComputerPlayerHard) {
+                    ((AbstractComputerPlayer)this).clearHittedFields();
+                }
                 break;
             }
         }
@@ -74,15 +77,19 @@ public abstract class AbstractPlayer {
         Square[][] ocean = opponentBord.getOcean();
         Square[][] empty = emptyBoard.getOcean();
 
-        if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_SHIP) {
-            empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
-            ocean[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
-            opponent.setSquareToHit(coords, empty, ocean, this);
-            return true;
+        try {
+            if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_SHIP) {
+                empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
+                ocean[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
+                opponent.setSquareToHit(coords, empty, ocean, this);
+                return true;
 
-        } else if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_EMPTY) {
-            empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_MISS);
-            ocean[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_MISS);
+            } else if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_EMPTY) {
+                empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_MISS);
+                ocean[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_MISS);
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
         }
         return false;
     }
