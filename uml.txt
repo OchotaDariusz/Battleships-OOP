@@ -17,10 +17,10 @@ package com.codecool.battleship.board {
 package com.codecool.battleship.players {
   abstract class AbstractPlayer
   class UserPlayer extends AbstractPlayer
-  abstract class ComputerPlayer extends AbstractPlayer
-  class ComputerPlayerEasy extends ComputerPlayer
-  class ComputerPlayerNormal extends ComputerPlayer
-  class ComputerPlayerHard extends ComputerPlayer
+  abstract class AbstractComputerPlayer extends AbstractPlayer
+  class ComputerPlayerEasy extends AbstractComputerPlayer
+  class ComputerPlayerNormal extends AbstractComputerPlayer
+  class ComputerPlayerHard extends AbstractComputerPlayer
 }
 
 package com.codecool.battleship.io {
@@ -39,36 +39,61 @@ class Battleship {
   -Input input
   -int gameMode
   -int gamePhase
-  -int getGamePhase()
+  -int difficulty
   -AbstractPlayer[] players
-  +void setGamePhase(int gamePhase)
+  -Board emptyBoard
+  -Board emptyBoard2
+  -Board playerOneBoard
+  -Board playerTwoBoard
+  -List<ShipType> shipTypeList
+  -int placementOption
+  -int getGamePhase()
+  -void setPlacementOption(int placementOption)
+  -void setGamePhase(int gamePhase)
+  -int getDifficulty()
+  -void setDifficulty(String difficulty)
+  -int getGameMode()
   -void setGameMode(int gameMode)
   -void mainLoop()
   -void displayMenu()
   +void startGame()
   -void displayHighScores(int playerId)
   -void exit()
-  -void makeMove(int playerId)
-  -boolean checkIfHit()
-  -boolean checkIfShipSunk()
-  -boolean checkIfWon()
+  -boolean makeMove(Board board, int playerId, AbstractPlayer player)
+  -void placementPhase(Board board, int playerId)
+  -boolean checkIfWon(int playerId)
   -void chooseGameMode(Battleship battleship)
+  -void chooseGameDifficulty()
+  -void choosePlacementOption(Battleship battleship)
   -void setupPlayers()
 }
 
 class Display {
   +void printMenu()
+  +void printPlacementOption()
   +void printBoard(Board board1, Board board2)
-  +void printGameplay()
+  -void printBoardHeaders(int boardSize)
+  -void printBoardBody(Board board1, Board board2, int boardSize)
+  -void printBoardBottom(int boardSize)
   +void printWinner(int playerId)
+  +void print(String string)
 }
 
 class Input {
-  +boolean validateForBoardSize(int size)
+  -final Display display
+  +String askForDirection()
   +String askForInput(String label)
-  +boolean validateGameMode(String input)
-  +boolean validateInput(String input, int size)
+  +int[] askForShootingCoords(String label, int boardSize)
+  -boolean validateShoot(String coords, int boardSize)
+  +boolean isDigit(String input)
+  +boolean validateOption(String input)
+  -boolean validateCords(String input, Board board, int boardSize, int shipLength)
+  -boolean isOnBoard(int[] coords, int boardSize)
+  -boolean isNotOccupied(Board board, int[] coords)
+  +boolean isSpaceForHorizontal(int[] coords, Board board, int boardSize, int shipLength)
+  +boolean isSpaceForVertical(int[] coords, Board board, int boardSize, int shipLength)
   -int[] convertCoords(String input)
+  +int[] askForCords(String label, Board board, int boardSize, int shipSize)
 }
 
 abstract class AbstractPlayer {
@@ -76,13 +101,26 @@ abstract class AbstractPlayer {
   +List<Ship> getShips()
   +void addShip(Ship ship)
   +boolean isAlive()
-  +{abstract} void makeMove()
+  +void setSquareToHit(int[] cords, Square[][] ocean, Square[][] emptyOcean, AbstractPlayer player)
+  +boolean isShipSunked(Ship ship)
+  +void removeShip(Ship ship, Square[][] ocean, Square[][] emptyOcean, AbstractPlayer player)
+  +boolean makeMove(Board opponentBord, Board emptyBoard, int[] coords, AbstractPlayer opponent)
 }
 
-abstract class ComputerPlayer {
-  -List<String> alreadyStruckFields
-  +List<String> getAlreadyStruckFields()
-  +void addStrike()
+abstract class AbstractComputerPlayer {
+  -List<int[]> usedFields
+  -List<int[]> shootedFields
+  -List<int[]> sunkenShipsFields
+  -Random RANDOM
+  +Random getRANDOM()
+  +List<int[]> getShootedFields()
+  +void clearHittedFields()
+  +void addShootedFields(int[] coords)
+  +void addSunkenShipsFields(int[] coords)
+  +void addUsedField(int[] coords)
+  +{abstract} int[] getRandomCoords(int boardSize)
+  +boolean checkIfUsed(int[] coords)
+  +void addToUsedFieldsAfterSunk()
 }
 
 interface BoardFactory {
@@ -91,14 +129,19 @@ interface BoardFactory {
 }
 
 class Board {
+  -int BOARD_SIZE
+  +int getBoardSize()
   -Square[][] ocean
   +Square[][] getOcean()
-  +boolean isPlacementOk()
+  +Board()
+  +void randomPlacement(AbstractPlayer player, Board board, int shipSize, Input input)
+  +void manualPlacement(AbstractPlayer player, Board board, int shipSize, Input input)
 }
 
 class Ship {
   -List<Square> coords
-  +List<Square> getCoords()
+  -List<Square> coords
+  +void addCords(Square square)
 }
 
 enum ShipType {
@@ -109,6 +152,7 @@ enum ShipType {
   DESTROYER(5)
 
   -int shipLength
+  +int getShipLength()
   ShipType(int length)
 }
 
@@ -116,21 +160,35 @@ class Square {
   -int x
   -int y
   -SquareStatus squareStatus
+  +void setSquareStatus(SquareStatus squareStatus)
+  +SquareStatus getSquareStatus()
   +int getX()
   +int getY()
-  +SquareStatus getSquareStatus()
-  +void showSquareStatus()
+  +Square()
+  +String toString()
 }
 
 enum SquareStatus {
-  EMPTY(" "),
-  SHIP("🚢"),
-  HIT("X"),
-  MISSED("◎")
+  S_EMPTY(" "),
+  S_SHIP("*"),
+  S_HIT("x"),
+  S_MISSED("o"),
+  S_SUNK("S")
 
-  -String character
-  +String getCharacter()
-
-  SquareStatus(String character)
+  +char getCharacter()
 }
+
+class ComputerPlayerEasy {
+  +int[] getRandomCoords(int boardSize)
+}
+
+class ComputerPlayerNormal {
+  +int[] getRandomCoords(int boardSize)
+}
+
+class ComputerPlayerHard {
+  +int[] getRandomCoords(int boardSize)
+  -int[] getNearFieldToShoot()
+}
+
 @enduml

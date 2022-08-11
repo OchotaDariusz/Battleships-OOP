@@ -58,19 +58,12 @@ public abstract class AbstractPlayer {
             emptyOcean[square.getX()][square.getY()].setSquareStatus(SquareStatus.S_SUNK);
             if (player instanceof AbstractComputerPlayer) {
                 ((AbstractComputerPlayer) player).addSunkenShipsFields(new int[]{square.getX(), square.getY()});
-                if (player instanceof ComputerPlayerNormal) {
+                if (player instanceof ComputerPlayerNormal || player instanceof ComputerPlayerHard) {
                     ((AbstractComputerPlayer) player).addToUsedFieldsAfterSunk();
                 }
             }
         }
         ships.remove(ship);
-    }
-
-    @Override
-    public String toString() {
-        return "AbstractPlayer{" +
-                "ships=" + ships +
-                '}';
     }
 
     public boolean makeMove(Board opponentBord, Board emptyBoard, int[] coords, AbstractPlayer opponent) {
