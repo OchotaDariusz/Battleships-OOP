@@ -12,6 +12,16 @@ public class Ship {
         return coords;
     }
 
+    @Override
+    public String toString() {
+        return "Ship{" +
+                "coords=" + coords +
+                '}';
+    }
+    public int getShipSize(){
+        return coords.size();
+    }
+
     public void addCords(Square square) {
         coords.add(square);
     }

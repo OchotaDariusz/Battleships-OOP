@@ -11,6 +11,7 @@ import com.codecool.battleship.ships.ShipType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class Battleship {
 
@@ -20,8 +21,11 @@ public class Battleship {
     private int gamePhase = 1;  // 1 - placement phase | 2 - shooting phase
     private final AbstractPlayer[] players = new AbstractPlayer[2];
     private final Board emptyBoard = new Board();
+    private final Board emptyBoard2 = new Board();
     private final Board playerOneBoard = new Board();
     private final Board playerTwoBoard = new Board();
+
+
     private final List<ShipType> shipTypeList = new ArrayList<ShipType>(
             Arrays.asList(ShipType.DESTROYER, ShipType.SUBMARINE, ShipType.BATTLESHIP,
                     ShipType.CRUISER, ShipType.CARRIER)
@@ -55,15 +59,20 @@ public class Battleship {
 
     private void mainLoop() {
         Board board;
+
         int playerId = 1;
         System.out.println("Main Loop");
         while (!checkIfWon()) {
             if (getGamePhase() == 2) {
                 if (playerId == 1) display.printBoard(playerOneBoard, emptyBoard);
-                else display.printBoard(emptyBoard, playerTwoBoard);
+                else display.printBoard(emptyBoard2, playerTwoBoard);
             }
             board = (playerId == 1) ? playerOneBoard : playerTwoBoard;
-            makeMove(board, playerId);
+            if (playerId == 1) {
+                makeMove(board, playerId, players[0]);
+            } else {
+                makeMove(board, playerId, players[1]);
+            }
 
             if (checkIfHit()) {
                 if (checkIfShipSunk()) {
@@ -87,7 +96,7 @@ public class Battleship {
     public void startGame() {
         System.out.println("Start Game");
         chooseGameMode(this);
-        choosePlacementOption(this);
+
         mainLoop();
     }
 
@@ -101,21 +110,26 @@ public class Battleship {
         System.exit(0);
     }
 
-    private void makeMove(Board board, int playerId) {
+    private void makeMove(Board board, int playerId, AbstractPlayer player) {
         System.out.println("Make Move(Play Turn)");
         if (getGamePhase() == 1) {
             placementPhase(board, playerId);
         } else {
             System.out.println("shooting phase");
-            // shooting phase
-            // get input
-            System.out.println(players[playerId - 1].getShips());
+            if (playerId == 1) {
+                int[] shootCoords = input.askForInput2("gimi coords", board.getBoardSize());
+                player.makeMove(playerTwoBoard, emptyBoard, shootCoords, players[1]);
+            } else {
+                int[] shootCoords = input.askForInput2("gimi coords", board.getBoardSize());
+                player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
+            }
             String cos = input.askForInput("pauza");
         }
 
     }
 
     private void placementPhase(Board board, int playerId) {
+
         System.out.println("placement phase");
         for (ShipType ship : shipTypeList) {
             if (playerId == 1) display.printBoard(playerOneBoard, emptyBoard);
@@ -130,18 +144,19 @@ public class Battleship {
                 if (placementOption == 1 && gameMode == 1) {
                     playerTwoBoard.manualPlacement(players[playerId - 1], board, ship.getShipLength(), input);
                 } else {
-//                    (AbstractPlayer player, Board board, int shipSize,Input input)
                     playerTwoBoard.randomPlacement(players[playerId - 1], board, ship.getShipLength(), input);
                 }
             }
         }
+
         if (playerId == 2 && getGamePhase() == 1) {
             setGamePhase(2);
         }
     }
 
     private boolean checkIfHit() {
-        return false;
+
+        return true;
     }
 
     private boolean checkIfShipSunk() {
@@ -163,6 +178,7 @@ public class Battleship {
         gameMode = Integer.parseInt(userInput);
         battleship.setGameMode(gameMode);
         setupPlayers();
+
     }
 
     private void choosePlacementOption(Battleship battleship) {
@@ -178,6 +194,7 @@ public class Battleship {
     }
 
     private void setupPlayers() {
+        choosePlacementOption(this);
         players[0] = new UserPlayer();
         if (getGameMode() == 1) {
             players[1] = new UserPlayer();

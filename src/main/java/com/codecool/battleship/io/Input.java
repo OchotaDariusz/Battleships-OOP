@@ -25,7 +25,20 @@ public class Input {
     public String askForInput(String label) {
         display.print(label);
         Scanner coordinates = new Scanner(System.in);
+
         return coordinates.nextLine().toUpperCase();
+    }
+
+    public int[] askForInput2(String label, int boardSize) {
+        display.print(label);
+        Scanner coordinates = new Scanner(System.in);
+        int[] coords;
+        do {
+            coords = convertCoords(coordinates.nextLine().toUpperCase());
+            if (!isOnBoard(coords, boardSize))
+                System.out.println("Invalid input 38");
+        } while (!isOnBoard(coords, boardSize));
+        return coords;
     }
 
     public boolean validateOption(String input) {
@@ -75,18 +88,12 @@ public class Input {
         }
         int[] check = new int[2];
         for (int i = 0; i < shipLength; i++) {
-            System.out.println("moze tu?");
-            System.out.println(coords[0]);
             check[0] = coords[0] + i;
             check[1] = coords[1];
-            System.out.println(coords[0]);
-            System.out.println("moze tu?");
             if (!isNotOccupied(board, check)) {
                 return false;
             }
         }
-        System.out.println("sprawdzam, horizontalcords[0]" + coords[0]);
-        System.out.println(" sprawdzam horizontal cords[1]" + coords[1]);
         return true;
     }
 
@@ -117,7 +124,6 @@ public class Input {
 
     public int[] askForCords(String label, Board board, int boardSize, int shipSize) {
         String input = askForInput(label);
-
         while (!validateCords(input, board, boardSize, shipSize)) {
             display.print("WRONG COORDS");
             input = askForInput(label);
