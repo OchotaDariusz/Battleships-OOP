@@ -1,9 +1,9 @@
 package com.codecool.battleship.players;
 
-import com.codecool.battleship.board.Board;
-
 public class ComputerPlayerHard extends AbstractComputerPlayer {
 
-
-
+    @Override
+    public int[] getRandomCoords(int boardSize) {
+        return new int[0];
+    }
 }

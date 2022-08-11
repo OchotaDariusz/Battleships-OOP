@@ -3,6 +3,7 @@ package com.codecool.battleship;
 import com.codecool.battleship.board.Board;
 import com.codecool.battleship.io.Display;
 import com.codecool.battleship.io.Input;
+import com.codecool.battleship.players.AbstractComputerPlayer;
 import com.codecool.battleship.players.AbstractPlayer;
 import com.codecool.battleship.players.ComputerPlayerEasy;
 import com.codecool.battleship.players.UserPlayer;
@@ -58,9 +59,7 @@ public class Battleship {
 
     private void mainLoop() {
         Board board;
-
         int playerId = 1;
-        System.out.println("Main Loop");
         boolean flag;
         while (!checkIfWon(playerId)) {
             if (getGamePhase() == 2) {
@@ -69,9 +68,9 @@ public class Battleship {
             }
             board = (playerId == 1) ? playerOneBoard : playerTwoBoard;
             if (playerId == 1) {
-                flag=makeMove(board, playerId, players[0]);
+                flag = makeMove(board, playerId, players[0]);
             } else {
-                flag=makeMove(board, playerId, players[1]);
+                flag = makeMove(board, playerId, players[1]);
             }
 
             if (!flag) {
@@ -104,16 +103,22 @@ public class Battleship {
     }
 
     private boolean makeMove(Board board, int playerId, AbstractPlayer player) {
-        System.out.println("Make Move(Play Turn)");
+        display.print("Make Move(Play Turn)");
         if (getGamePhase() == 1) {
             placementPhase(board, playerId);
         } else {
-            System.out.println("shooting phase");
+            display.print("Shooting phase");
+//            int[] shootCoords = input.askForShootingCoords("Choose field to shoot", board.getBoardSize());
+            int[] shootCoords;
+            if (getGameMode() == 2 && playerId == 2) {
+                // random coords for Computer AI
+                shootCoords = ((AbstractComputerPlayer)players[1]).getRandomCoords(board.getBoardSize());
+            } else {
+                shootCoords = input.askForShootingCoords("Choose field to shoot", board.getBoardSize());
+            }
             if (playerId == 1) {
-                int[] shootCoords = input.askForShootingCoords("gimi coords", board.getBoardSize());
                 return player.makeMove(playerTwoBoard, emptyBoard, shootCoords, players[1]);
             } else {
-                int[] shootCoords = input.askForShootingCoords("gimi coords", board.getBoardSize());
                 return player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
             }
         }
@@ -121,7 +126,7 @@ public class Battleship {
     }
 
     private void placementPhase(Board board, int playerId) {
-        System.out.println("placement phase");
+        display.print("Placement phase");
         for (ShipType ship : shipTypeList) {
             if (playerId == 1) display.printBoard(playerOneBoard, emptyBoard);
             else display.printBoard(emptyBoard, playerTwoBoard);
@@ -146,14 +151,14 @@ public class Battleship {
     }
 
     private boolean checkIfWon(int playerId) {
-        if(getGamePhase()==2){
-            if (playerId==1){
+        if (getGamePhase() == 2) {
+            if (playerId == 1) {
                 return !players[1].isAlive();
-            }else {
+            } else {
                 return !players[0].isAlive();
             }
         }
-       return false;
+        return false;
     }
 
     private void chooseGameMode(Battleship battleship) {
@@ -161,7 +166,7 @@ public class Battleship {
         String userInput = input.askForInput("Choose game mode: ");
         int gameMode;
         while (!input.validateOption(userInput)) {
-            System.out.println("Wrong input!");
+            display.print("Wrong input!");
             userInput = input.askForInput("Choose game mode: ");
         }
         gameMode = Integer.parseInt(userInput);

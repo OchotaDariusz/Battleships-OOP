@@ -10,8 +10,7 @@ import java.util.List;
 
 public abstract class AbstractPlayer {
 
-    private List<Ship> ships = new ArrayList<Ship>();
-
+    private final List<Ship> ships = new ArrayList<Ship>();
 
     public List<Ship> getShips() {
         return ships;
@@ -25,7 +24,7 @@ public abstract class AbstractPlayer {
         return ships.size() != 0;
     }
 
-    public void setSquareToHit(int[] cords, Square[][] ocean) {
+    public void setSquareToHit(int[] cords, Square[][] ocean, Square[][] emptyOcean) {
         List<Ship> ships = getShips();
 
         for (Ship ship : ships) {
@@ -36,27 +35,27 @@ public abstract class AbstractPlayer {
                 }
             }
             if (isShipSunked(ship)) {
-                removeShip(ship, ocean);
+                removeShip(ship, ocean, emptyOcean);
                 break;
             }
         }
     }
 
     public boolean isShipSunked(Ship ship) {
-        for (Square sqare : ship.getCoords()) {
-            if (sqare.getSquareStatus() != SquareStatus.S_HIT)
+        for (Square square : ship.getCoords()) {
+            if (square.getSquareStatus() != SquareStatus.S_HIT)
                 return false;
         }
         return true;
     }
 
-    public void removeShip(Ship ship, Square[][] ocean) {
+    public void removeShip(Ship ship, Square[][] ocean, Square[][] emptyOcean) {
         for (Square square : ship.getCoords()) {
             ocean[square.getX()][square.getY()].setSquareStatus(SquareStatus.S_SUNK);
+            emptyOcean[square.getX()][square.getY()].setSquareStatus(SquareStatus.S_SUNK);
         }
         ships.remove(ship);
     }
-
 
     @Override
     public String toString() {
@@ -66,18 +65,19 @@ public abstract class AbstractPlayer {
     }
 
     public boolean makeMove(Board opponentBord, Board emptyBoard, int[] coords, AbstractPlayer opponent) {
-        Square ocean[][] = opponentBord.getOcean();
-        Square empty[][] = emptyBoard.getOcean();
+        Square[][] ocean = opponentBord.getOcean();
+        Square[][] empty = emptyBoard.getOcean();
 
         if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_SHIP) {
             empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
-            opponent.setSquareToHit(coords, empty);
+            ocean[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_HIT);
+            opponent.setSquareToHit(coords, empty, ocean);
             return true;
 
         } else if (ocean[coords[0]][coords[1]].getSquareStatus() == SquareStatus.S_EMPTY) {
             empty[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_MISS);
+            ocean[coords[0]][coords[1]].setSquareStatus(SquareStatus.S_MISS);
         }
-
         return false;
     }
 }

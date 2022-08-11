@@ -32,22 +32,23 @@ public class Input {
         display.print(label);
         Scanner coordinates = new Scanner(System.in);
         String input = coordinates.nextLine().toUpperCase();
-        while (!validateShoot(input)) {
+        while (!validateShoot(input, boardSize)) {
             display.print("wrong coordinates!");
             input = coordinates.nextLine().toUpperCase();
         }
         int[] coords = convertCoords(input);
-
         return coords;
     }
 
-    private boolean validateShoot(String coords) {
+    private boolean validateShoot(String coords, int boardSize) {
         if (!String.valueOf(coords.charAt(0)).matches("\\D") || coords.length() > 3 || isDigit(String.valueOf(coords.charAt(0)))) {
-
             return false;
         }
-        return isDigit(coords.substring(1));
-
+        if (isDigit(coords.substring(1))) {
+            return Integer.parseInt(coords.substring(1)) > 0 &&
+                    Integer.parseInt(coords.substring(1)) < boardSize;
+        }
+        return false;
     }
 
     public boolean isDigit(String input) {
