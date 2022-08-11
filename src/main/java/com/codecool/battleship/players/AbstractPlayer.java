@@ -37,7 +37,6 @@ public abstract class AbstractPlayer {
             }
             if (isShipSunked(ship)) {
                 removeShip(ship,ocean);
-                System.out.println("zatonął");
                 break;
             }
         }

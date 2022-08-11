@@ -141,7 +141,7 @@ public class Display {
     }
 
     public void printWinner(int playerId) {
-
+        System.out.println("Player "+ playerId+ " won!");
     }
 
     public void print(String string) {

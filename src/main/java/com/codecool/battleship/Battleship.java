@@ -63,7 +63,7 @@ public class Battleship {
         int playerId = 1;
         System.out.println("Main Loop");
         boolean flag;
-        while (!checkIfWon()) {
+        while (!checkIfWon(playerId)) {
             if (getGamePhase() == 2) {
                 if (playerId == 1) display.printBoard(playerOneBoard, emptyBoard);
                 else display.printBoard(emptyBoard2, playerTwoBoard);
@@ -75,12 +75,7 @@ public class Battleship {
                 flag=makeMove(board, playerId, players[1]);
             }
 
-            if (flag) {
-                if (checkIfShipSunk()) {
-                    //update ship character to Sunk and take from players ship that sunken ship
-                    System.out.println("Ship has been sunken");
-                }
-            } else {
+            if (!flag) {
                 playerId = (playerId == 1) ? 2 : 1;
             }
         }
@@ -101,7 +96,7 @@ public class Battleship {
     }
 
     private void displayHighScores(int playerId) {
-        System.out.println("High scores");
+
         display.printWinner(playerId);
 
     }
@@ -153,12 +148,16 @@ public class Battleship {
     }
 
 
-    private boolean checkIfShipSunk() {
-        return false;
-    }
 
-    private boolean checkIfWon() {
-        return false;
+    private boolean checkIfWon(int playerId) {
+        if(getGamePhase()==2){
+            if (playerId==1){
+                return !players[1].isAlive();
+            }else {
+                return !players[0].isAlive();
+            }
+        }
+       return false;
     }
 
     private void chooseGameMode(Battleship battleship) {
