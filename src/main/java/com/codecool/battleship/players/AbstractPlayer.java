@@ -37,7 +37,7 @@ public abstract class AbstractPlayer {
             if (isShipSunked(ship)) {
                 removeShip(ship, ocean, emptyOcean, player);
                 if (this instanceof ComputerPlayerHard) {
-                    ((AbstractComputerPlayer)this).clearHittedFields();
+                    ((AbstractComputerPlayer) this).clearHittedFields();
                 }
                 break;
             }
@@ -57,9 +57,9 @@ public abstract class AbstractPlayer {
             ocean[square.getX()][square.getY()].setSquareStatus(SquareStatus.S_SUNK);
             emptyOcean[square.getX()][square.getY()].setSquareStatus(SquareStatus.S_SUNK);
             if (player instanceof AbstractComputerPlayer) {
-                ((AbstractComputerPlayer)player).addSunkenShipsFields(new int[]{square.getX(), square.getY()});
+                ((AbstractComputerPlayer) player).addSunkenShipsFields(new int[]{square.getX(), square.getY()});
                 if (player instanceof ComputerPlayerNormal) {
-                    ((AbstractComputerPlayer)player).addToUsedFieldsAfterSunk();
+                    ((AbstractComputerPlayer) player).addToUsedFieldsAfterSunk();
                 }
             }
         }

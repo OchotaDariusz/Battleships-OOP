@@ -16,6 +16,7 @@ public class Battleship {
     private final Input input = new Input();
     private int gameMode;  // 1 - player vs player | 2 - player vs computer
     private int gamePhase = 1;  // 1 - placement phase | 2 - shooting phase
+    private int difficulty;
     private final AbstractPlayer[] players = new AbstractPlayer[2];
     private final Board emptyBoard = new Board();
     private final Board emptyBoard2 = new Board();
@@ -30,20 +31,26 @@ public class Battleship {
 
     private int placementOption;
 
-    public int getGamePhase() {
+    private int getGamePhase() {
         return gamePhase;
     }
 
-    public int getPlacementOption() {
-        return placementOption;
-    }
-
-    public void setPlacementOption(int placementOption) {
+    private void setPlacementOption(int placementOption) {
         this.placementOption = placementOption;
     }
 
-    public void setGamePhase(int gamePhase) {
+    private void setGamePhase(int gamePhase) {
         this.gamePhase = gamePhase;
+    }
+
+    private int getDifficulty() {
+        return difficulty;
+    }
+
+    private void setDifficulty(String difficulty) {
+        if (difficulty.equals("1")) this.difficulty = 1;
+        else if (difficulty.equals("2")) this.difficulty = 2;
+        else this.difficulty = 3;
     }
 
     private int getGameMode() {
@@ -79,20 +86,17 @@ public class Battleship {
     }
 
     private void displayMenu() {
-        System.out.println("Display Menu");
         display.printMenu();
     }
 
     public void startGame() {
-        System.out.println("Start Game");
         chooseGameMode(this);
+        if (getGameMode() == 2) chooseGameDifficulty();
         mainLoop();
     }
 
     private void displayHighScores(int playerId) {
-
         display.printWinner(playerId);
-
     }
 
     private void exit() {
@@ -108,7 +112,7 @@ public class Battleship {
             int[] shootCoords;
             if (getGameMode() == 2 && playerId == 2) {
                 // random coords for Computer AI
-                shootCoords = ((AbstractComputerPlayer)players[1]).getRandomCoords(board.getBoardSize());
+                shootCoords = ((AbstractComputerPlayer) players[1]).getRandomCoords(board.getBoardSize());
             } else {
                 shootCoords = input.askForShootingCoords("Choose field to shoot", board.getBoardSize());
             }
@@ -118,11 +122,8 @@ public class Battleship {
                 if (getGameMode() == 2) {
                     boolean hitted = player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
                     if (hitted) {
-                        ((AbstractComputerPlayer)player).addShootedFields(shootCoords);
+                        ((AbstractComputerPlayer) player).addShootedFields(shootCoords);
                     }
-                    System.out.println("Used FIelds " + ((AbstractComputerPlayer)player).getUsedFields()); //TODO: DELETE
-                    System.out.println("shooted fields " + ((AbstractComputerPlayer)player).getShootedFields()); //TODO: DELETE
-                    System.out.println("sunken ship fields " + ((AbstractComputerPlayer)player).getSunkenShipsFields()); //TODO: DELETE
                     return hitted;
                 }
                 return player.makeMove(playerOneBoard, emptyBoard2, shootCoords, players[0]);
@@ -179,7 +180,16 @@ public class Battleship {
         gameMode = Integer.parseInt(userInput);
         battleship.setGameMode(gameMode);
         setupPlayers();
+    }
 
+    private void chooseGameDifficulty() {
+        display.print("1 - EASY | 2 - MEDIUM | 0 - HARD");
+        String userInput = input.askForInput("Choose game difficulty: ");
+        while (!input.validateOption(userInput)) {
+            display.print("Wrong input!");
+            userInput = input.askForInput("Choose game difficulty: ");
+        }
+        setDifficulty(userInput);
     }
 
     private void choosePlacementOption(Battleship battleship) {
@@ -187,7 +197,7 @@ public class Battleship {
         String option = input.askForInput("Choose placement option: ");
         int placement;
         while (!input.validateOption(option) && !option.equals("0")) {
-            System.out.println("Wrong input!");
+            display.print("Wrong input!");
             option = input.askForInput("Choose placement option: ");
         }
         placement = Integer.parseInt(option);
@@ -200,9 +210,9 @@ public class Battleship {
         if (getGameMode() == 1) {
             players[1] = new UserPlayer();
         } else {
-//            players[1] = new ComputerPlayerEasy();
-//            players[1] = new ComputerPlayerNormal();
-            players[1] = new ComputerPlayerHard();
+            if (getDifficulty() == 1) players[1] = new ComputerPlayerEasy();
+            else if (getDifficulty() == 2) players[1] = new ComputerPlayerNormal();
+            else players[1] = new ComputerPlayerHard();
         }
     }
 

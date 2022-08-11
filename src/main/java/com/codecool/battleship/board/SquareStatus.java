@@ -7,6 +7,7 @@ public enum SquareStatus {
     S_HIT,
     S_MISS,
     S_SUNK;
+
     public char getCharacter() {
         if (this == S_SHIP) {
             return '*';
@@ -17,7 +18,7 @@ public enum SquareStatus {
         if (this == S_MISS) {
             return 'o';
         }
-        if(this==S_SUNK){
+        if (this == S_SUNK) {
             return 'S';
         }
         return ' ';

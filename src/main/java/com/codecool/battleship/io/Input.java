@@ -9,10 +9,6 @@ public class Input {
 
     private final Display display = new Display();
 
-    public boolean validateForBoardSize(int size) {
-        return size < 10 || size > 20;
-    }
-
     public String askForDirection() {
         display.print("1 - Horizontal | 2 - Vertical");
         String direction = askForInput("Choose direction:");

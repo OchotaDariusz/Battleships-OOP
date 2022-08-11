@@ -1,6 +1,6 @@
 package com.codecool;
 
-import com.codecool.battleship.*;
+import com.codecool.battleship.Battleship;
 
 public class Main {
 

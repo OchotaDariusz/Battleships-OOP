@@ -136,10 +136,6 @@ public class Display {
         System.out.println(boardBottom);
     }
 
-    public void printGameplay() {
-        System.out.println("shoot miss hit");
-    }
-
     public void printWinner(int playerId) {
         System.out.println("Player " + playerId + " won!");
     }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ship {
-    private List<Square> coords = new ArrayList<Square>();
+    private final List<Square> coords = new ArrayList<Square>();
 
     public List<Square> getCoords() {
         return coords;

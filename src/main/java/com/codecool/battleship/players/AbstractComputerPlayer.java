@@ -1,7 +1,5 @@
 package com.codecool.battleship.players;
 
-import com.codecool.battleship.board.SquareStatus;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,16 +16,8 @@ public abstract class AbstractComputerPlayer extends AbstractPlayer {
         return RANDOM;
     }
 
-    public List<int[]> getUsedFields() { //TODO: DELETE
-        return usedFields;
-    }
-
     public List<int[]> getShootedFields() {
         return shootedFields;
-    }
-
-    public List<int[]> getSunkenShipsFields() { //TODO: DELETE
-        return sunkenShipsFields;
     }
 
     public void clearHittedFields() {

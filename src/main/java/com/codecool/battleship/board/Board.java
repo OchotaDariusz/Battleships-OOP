@@ -67,7 +67,6 @@ public class Board implements BoardFactory {
             if (horizontal || vertical) flag = false;
         } while (flag);
         int x = coords[0], y = coords[1];
-        // TODO: REFACTOR
         for (int i = 0; i < shipSize; i++) {
             if (horizontal) {
                 ocean[x + i][y].setSquareStatus(SquareStatus.S_SHIP);
@@ -86,9 +85,7 @@ public class Board implements BoardFactory {
         Ship ship = new Ship();
 
         int[] coords = input.askForCords("Place your ship", board, BOARD_SIZE, shipSize);
-//            pobranie kierunku + validacja
         int x = coords[0], y = coords[1];
-//        ocean[x][y].setSquareStatus(SquareStatus.S_SHIP);
         boolean spaceForVertical = input.isSpaceForVertical(coords, board, board.getBoardSize(), shipSize);
         boolean spaceForHorizontal = input.isSpaceForHorizontal(coords, board, board.getBoardSize(), shipSize);
 
