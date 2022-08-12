@@ -15,7 +15,6 @@ public class ComputerPlayerHard extends AbstractComputerPlayer {
             }
             if (getShootedFields().size() > 0) {
                 coords = getNearFieldToShoot();
-                System.out.println("Near field to shoot " + Arrays.toString(coords));
             } else {
                 coords[0] = getRANDOM().nextInt(1, boardSize);
                 coords[1] = getRANDOM().nextInt(1, boardSize);
