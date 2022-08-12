@@ -33,13 +33,9 @@ public class ComputerPlayerHard extends AbstractComputerPlayer {
                 try {
                     int[] field = getShootedFields().get(getShootedFields().size() - 1);
                     int[] fieldToShoot = new int[2];
-                    System.out.println("ostatnio trafil tu: " + Arrays.toString(field));
-                    System.out.println("shooted fields: " + getShootedFields());
                     fieldToShoot[0] = field[0] + fields[i];
                     fieldToShoot[1] = field[1] + fields[j];
                     if (!checkIfUsed(fieldToShoot)) {
-                        System.out.println("wlazł tu");
-                        System.out.println("a tu strzeli: " + Arrays.toString(fieldToShoot));
                         return fieldToShoot;
                     }
 
