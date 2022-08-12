@@ -21,7 +21,6 @@ public class Display {
     }
 
     public void printBoard(Board board1, Board board2) {
-        System.out.println("Board");
         printBoardHeaders(board1.getBoardSize());
         printBoardBody(board1, board2, board1.getBoardSize());
         printBoardBottom(board1.getBoardSize());
